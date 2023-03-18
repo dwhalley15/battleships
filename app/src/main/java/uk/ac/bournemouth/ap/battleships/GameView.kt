@@ -1,10 +1,8 @@
 package uk.ac.bournemouth.ap.battleships
 
+import BattleShipGame
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
@@ -17,8 +15,9 @@ class GameView: View {
         defStyleAttr
     )
 
-    private val colCount get() = 11
-    private val rowCount get() = 11
+
+    private val colCount:Int get() = 11
+    private val rowCount:Int get() = 11
 
     private val backPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -36,10 +35,16 @@ class GameView: View {
     }
 
     private val wordPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        setTextAlign(Paint.Align.CENTER)
-        setTextSize(20f * resources.displayMetrics.density)
-        setTypeface(Typeface.SANS_SERIF)
+        textAlign = Paint.Align.CENTER
+        textSize = 20f * resources.displayMetrics.density
+        typeface = Typeface.SANS_SERIF
         color = Color.BLACK
+    }
+
+    private val textOffset = run {
+        val textBounds = Rect()
+        wordPaint.getTextBounds("X", 0, 1, textBounds)
+        (textBounds.top + textBounds.bottom) / -2f
     }
 
 
@@ -65,19 +70,19 @@ class GameView: View {
         //Draw column numbers
         var xCount = 0
         for(x in 1..colCount){
-            canvas.drawText("$xCount", x*cellWidth+cellWidth/2,cellHeight/2,wordPaint)
+            canvas.drawText("$xCount", x*cellWidth+cellWidth/2,cellHeight/2 + textOffset, wordPaint)
             xCount += 1
         }
 
         //Draw row headers
         for(y in 0..rowCount){
-            canvas.drawRect(0f,y*cellHeight,cellWidth, cellHeight,headerPaint)
+            canvas.drawRect(0f,y*cellHeight,cellWidth, cellHeight, headerPaint)
         }
 
         //Draw row numbers
         var yCount = 0
         for(y in 1..rowCount){
-            canvas.drawText("$yCount", cellWidth/2,y*cellHeight+cellHeight/2,wordPaint)
+            canvas.drawText("$yCount", cellWidth/2,y*cellHeight+cellHeight/2 + textOffset, wordPaint)
             yCount += 1
         }
 
