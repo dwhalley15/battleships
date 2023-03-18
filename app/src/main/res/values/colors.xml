@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#e9316b</color>
+    <color name="colorPrimaryDark">#b10041</color>
+    <color name="colorAccent">#44b8af</color>
+    <color name="shipColor">#000000</color>
+    <color name="sunkColor">#800000</color>
+    <color name="background">#ffffff</color>
+    <color name="focusBackground">#B2EBF2</color>
+    <color name="hintColor">#00008f</color>
+
+    <color name="secondaryLightColor">#7bebe1</color>
+    <color name="secondaryDarkColor">#008880</color>
+</resources>

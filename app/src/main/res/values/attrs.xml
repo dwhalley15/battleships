@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BattleshipGuessView">
+        <attr name="backgroundColor" format="color" />
+        <attr name="player1Color" format="color" />
+        <attr name="player1Label" format="string" />
+        <attr name="player2Color" format="color" />
+        <attr name="player2Label" format="string" />
+    </declare-styleable>
+</resources>
