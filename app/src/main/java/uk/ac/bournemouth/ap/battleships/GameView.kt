@@ -41,11 +41,38 @@ class GameView: View {
         color = Color.BLACK
     }
 
+    private val dotPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        strokeWidth = 20f
+        strokeCap = Paint.Cap.ROUND
+        color = Color.BLACK
+    }
+
+    private val circlePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        style = Paint.Style.STROKE
+        strokeWidth = 10f
+        isAntiAlias = true
+        color = Color.RED
+    }
+
+    private val xPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textAlign = Paint.Align.CENTER
+        textSize = 20f * resources.displayMetrics.density
+        typeface = Typeface.SANS_SERIF
+        color = Color.RED
+    }
+
+    private val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.RED
+    }
+
     private val textOffset = run {
         val textBounds = Rect()
         wordPaint.getTextBounds("X", 0, 1, textBounds)
         (textBounds.top + textBounds.bottom) / -2f
     }
+
+
 
 
 
@@ -58,6 +85,9 @@ class GameView: View {
         //Set the cell size
         val cellWidth = minOf(canvasWidth / colCount)
         val cellHeight = minOf(canvasHeight / rowCount)
+
+        //Set circle radius
+        val radius: Float = minOf(cellWidth/2,cellHeight/2) -10f
 
         //Draw background
         canvas.drawRect(0f,0f, canvasWidth, canvasHeight, backPaint)
@@ -96,6 +126,25 @@ class GameView: View {
             canvas.drawLine(0f, y * cellHeight, canvasWidth, y * cellHeight, linePaint)
         }
 
+        //Draw cell tokens
+        for(x in 2..rowCount){
+            for(y in 2..colCount){
+
+                //TODO when(game.guess) returns hit, miss, or sunk else unsigned
+
+                //Unsigned token
+                canvas.drawPoint(x*cellWidth-cellWidth/2, y*cellHeight-cellHeight/2, dotPaint)
+
+                //Miss token
+                //canvas.drawCircle(x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2,radius, circlePaint)
+
+                //Hit token
+                //canvas.drawText("X", x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, xPaint)
+
+                //Sunk token
+                //canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
+            }
+        }
     }
 
 
