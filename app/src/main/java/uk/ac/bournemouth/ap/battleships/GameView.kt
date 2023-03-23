@@ -1,6 +1,5 @@
 package uk.ac.bournemouth.ap.battleships
 
-import BattleShipGame
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -73,9 +72,6 @@ class GameView: View {
     }
 
 
-
-
-
     override fun onDraw(canvas: Canvas) {
 
         //Measure size of the canvas
@@ -134,6 +130,7 @@ class GameView: View {
 
                 //Unsigned token
                 canvas.drawPoint(x*cellWidth-cellWidth/2, y*cellHeight-cellHeight/2, dotPaint)
+
 
                 //Miss token
                 //canvas.drawCircle(x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2,radius, circlePaint)

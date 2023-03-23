@@ -1,25 +1,20 @@
+package uk.ac.bournemouth.ap.battleshipslogic
+
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshiplib.GuessResult
-import uk.ac.bournemouth.ap.lib.matrix.Matrix
 
-class BattleShipGame(
-    override val columns: Int,
-    override val rows: Int,
-    override val opponent: BattleshipOpponent,
+class MyGrid(override val columns: Int, override val rows: Int) : BattleshipGrid{
+
+    override val opponent: BattleshipOpponent
+        get() = TODO("Not yet implemented")
+
     override val shipsSunk: BooleanArray
-): BattleshipGrid {
-
-
-    //private val grid: Matrix<Cell> = Matrix(9, 9, ::Cell)
-
-    private var data: Array<IntArray> = Array(columns) { IntArray(rows) { 0 } }
-
-    var playerTurn: Int = 1
-        private set
+        get() = TODO("Not yet implemented")
 
     override fun get(column: Int, row: Int): GuessCell {
+        //return grid[column][row]
         TODO("Not yet implemented")
     }
 
