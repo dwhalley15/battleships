@@ -14,7 +14,6 @@ class MyGrid(override val columns: Int, override val rows: Int) : BattleshipGrid
         get() = TODO("Not yet implemented")
 
     override fun get(column: Int, row: Int): GuessCell {
-        //return grid[column][row]
         TODO("Not yet implemented")
     }
 
