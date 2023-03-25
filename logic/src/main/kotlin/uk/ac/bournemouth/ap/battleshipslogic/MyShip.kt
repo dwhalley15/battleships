@@ -9,5 +9,19 @@ class MyShip(
     override val right: Int
 ) : Ship {
 
+    private val shipTypes = intArrayOf(
+        5, // Carrier
+        4, // Battleship"
+        3, // Cruiser"
+        3, // Submarine"
+        2 // Destroyer
+    )
+
+    enum class Direction{
+        HORIZONTAL, VERTICAL;
+    }
+
+    val ships = (mutableListOf <Ship>())
+
 
 }

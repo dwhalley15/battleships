@@ -5,13 +5,18 @@ import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshiplib.GuessResult
 
-class MyGrid(override val columns: Int, override val rows: Int) : BattleshipGrid{
-
+class MyGrid(
+    override val columns: Int,
+    override val rows: Int,
     override val opponent: BattleshipOpponent
-        get() = TODO("Not yet implemented")
+) : BattleshipGrid{
 
     override val shipsSunk: BooleanArray
         get() = TODO("Not yet implemented")
+
+    fun createGrid(columns: Int, rows: Int): Array<IntArray> {
+        return Array(columns) { IntArray(rows) { 0 } }
+    }
 
     override fun get(column: Int, row: Int): GuessCell {
         TODO("Not yet implemented")

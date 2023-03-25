@@ -4,6 +4,9 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
+import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
+import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
 
 class GameView: View {
     constructor(context: Context?) : super(context)
@@ -14,9 +17,16 @@ class GameView: View {
         defStyleAttr
     )
 
+    private val redGame = MyBattleShipGame(10,10)
 
-    private val colCount:Int get() = 11
-    private val rowCount:Int get() = 11
+    private val redGrid = redGame.createdRedPlayerGrid
+
+    private val redShips = redGame.redPlayer.ships
+
+    private val something = redGame.placeShipsOnGrid(redShips, redGrid)
+
+    private val colCount:Int get() = redGame.columns
+    private val rowCount:Int get() = redGame.rows
 
     private val backPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -79,8 +89,8 @@ class GameView: View {
         val canvasHeight = height.toFloat()
 
         //Set the cell size
-        val cellWidth = minOf(canvasWidth / colCount)
-        val cellHeight = minOf(canvasHeight / rowCount)
+        val cellWidth = minOf(canvasWidth / colCount+1)
+        val cellHeight = minOf(canvasHeight / rowCount+1)
 
         //Set circle radius
         val radius: Float = minOf(cellWidth/2,cellHeight/2) -10f
@@ -89,48 +99,56 @@ class GameView: View {
         canvas.drawRect(0f,0f, canvasWidth, canvasHeight, backPaint)
 
         //Draw column headers
-        for(x in 0..colCount){
+        for(x in 0..colCount+1){
             canvas.drawRect(x*cellWidth,0f,cellWidth, cellHeight,headerPaint)
         }
 
         //Draw column numbers
         var xCount = 0
-        for(x in 1..colCount){
+        for(x in 0..colCount+1){
             canvas.drawText("$xCount", x*cellWidth+cellWidth/2,cellHeight/2 + textOffset, wordPaint)
             xCount += 1
         }
 
         //Draw row headers
-        for(y in 0..rowCount){
+        for(y in 0..rowCount+1){
             canvas.drawRect(0f,y*cellHeight,cellWidth, cellHeight, headerPaint)
         }
 
         //Draw row numbers
         var yCount = 0
-        for(y in 1..rowCount){
+        for(y in 0..rowCount+1){
             canvas.drawText("$yCount", cellWidth/2,y*cellHeight+cellHeight/2 + textOffset, wordPaint)
             yCount += 1
         }
 
+
+
         //Draw grid column lines
-        for(x in 0..colCount){
+        for(x in 0..colCount+1){
             canvas.drawLine(x * cellWidth, 0f, x * cellWidth, canvasHeight, linePaint)
         }
 
         //Draw grid row lines
-        for(y in 0..rowCount){
+        for(y in 0..rowCount+1){
             canvas.drawLine(0f, y * cellHeight, canvasWidth, y * cellHeight, linePaint)
         }
+
 
         //Draw cell tokens
         for(x in 2..rowCount){
             for(y in 2..colCount){
 
-                //TODO when(game.guess) returns hit, miss, or sunk else unsigned
+                //when(game.guess) returns hit, miss, or sunk else unsigned
+                if(redGrid[x-2][y-2] != 0){
+                    canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
+                }
+                else{
+                    canvas.drawPoint(x * cellWidth - cellWidth / 2, y * cellHeight - cellHeight / 2, dotPaint)
+                }
 
                 //Unsigned token
-                canvas.drawPoint(x*cellWidth-cellWidth/2, y*cellHeight-cellHeight/2, dotPaint)
-
+                //canvas.drawPoint(x * cellWidth - cellWidth / 2, y * cellHeight - cellHeight / 2, dotPaint)
 
                 //Miss token
                 //canvas.drawCircle(x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2,radius, circlePaint)
