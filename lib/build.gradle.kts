@@ -12,6 +12,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     api("io.github.pdvrieze.matrixlib:matrixlib:1.0")
+    //implementation(project(mapOf("path" to ":logic")))
 
     testImplementation("org.junit.jupiter:junit-jupiter:${rootProject.extra["junit_version"]}")
     testImplementation("org.junit.jupiter:junit-jupiter-params:${rootProject.extra["junit_version"]}")

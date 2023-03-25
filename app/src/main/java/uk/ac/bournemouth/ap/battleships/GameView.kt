@@ -19,11 +19,9 @@ class GameView: View {
 
     private val redGame = MyBattleShipGame(10,10)
 
-    private val redGrid = redGame.createdRedPlayerGrid
+    //private val redShips = redGame.redPlayer.ships
 
-    private val redShips = redGame.redPlayer.ships
-
-    private val something = redGame.placeShipsOnGrid(redShips, redGrid)
+    private val redGrid = redGame.redPlayerGrid
 
     private val colCount:Int get() = redGame.columns
     private val rowCount:Int get() = redGame.rows
@@ -73,6 +71,11 @@ class GameView: View {
     private val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.RED
+    }
+
+    private val shipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.GRAY
     }
 
     private val textOffset = run {
@@ -140,8 +143,9 @@ class GameView: View {
             for(y in 2..colCount){
 
                 //when(game.guess) returns hit, miss, or sunk else unsigned
-                if(redGrid[x-2][y-2] != 0){
-                    canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
+                if(redGrid[y-2][x-2] != 0){
+                    canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, shipPaint)
+                    canvas.drawText(redGrid[y-2][x-2].toString(), x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, wordPaint)
                 }
                 else{
                     canvas.drawPoint(x * cellWidth - cellWidth / 2, y * cellHeight - cellHeight / 2, dotPaint)

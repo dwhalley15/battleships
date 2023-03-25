@@ -6,37 +6,31 @@ import kotlin.random.Random
 
 class MyBattleShipGame(override val columns: Int, override val rows: Int) : BattleShipGame {
 
-    private val shipList = intArrayOf(
-        5, // Carrier
-        4, // Battleship"
-        3, // Cruiser"
-        3, // Submarine"
-        2 // Destroyer
-    )
 
-    val redPlayer = MyOpponent(columns, rows, placeShipsRandom(columns, rows, shipList))
+    val redPlayer = MyOpponent(columns, rows)
 
-    val redPlayerGrid = MyGrid(columns, rows, redPlayer)
+    val redPlayerGrid = redPlayer.placeShipsOnGrid(redPlayer.ships)
 
-    val createdRedPlayerGrid = redPlayerGrid.createGrid(columns, rows)
 
-    fun placeShipsOnGrid(ships: List<Ship>, grid: Array<IntArray> ): Boolean{
+    /**
+    fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
+        val grid = Array(columns) { IntArray(rows) { 0 } }
         for(ship in ships) {
             for (row in ship.top until ship.bottom+1) {
                 for (column in ship.left until ship.right+1)
                     grid[column][row] = ship.size
             }
         }
-        return true
-    }
+        return grid
+    }**/
 
-    val bluePlayer = MyOpponent(columns, rows, placeShipsRandom(columns, rows, shipList))
+    /**val bluePlayer = MyOpponent(columns, rows, placeShipsRandom(columns, rows, shipTypes))
 
     val bluePlayerGrid = MyGrid(columns, rows, bluePlayer)
 
-    val createdBluePlayerGrid = bluePlayerGrid.createGrid(columns, rows)
+    val createdBluePlayerGrid = bluePlayerGrid.createGrid()**/
 
-    //Function to randomly place ships on the grid.
+    /**Function to randomly place ships on the grid.
     override fun placeShipsRandom(columns: Int, rows: Int, shipList: IntArray): List<Ship> {
         val ships = (mutableListOf <Ship>())
         for(ship in shipList){
@@ -45,7 +39,7 @@ class MyBattleShipGame(override val columns: Int, override val rows: Int) : Batt
                     //Gets the ship size from the list of ships.
                     val length = ship
                     // Randomly selects direction 0 = horizontal, 1 = vertical.
-                    val direction = Random.nextInt(0, 1)
+                    val direction = Random.nextInt(0, 2)
                     // Randomly picks the top value depending on direction, then works out left, bottom and right depending on top and direction.
                     override val top: Int =
                         if (direction == 0) {
@@ -75,22 +69,22 @@ class MyBattleShipGame(override val columns: Int, override val rows: Int) : Batt
                         }
                 }
             }
-            while(!overlap(candidate, ships))
+            while(!overlap(candidate, ships, redPlayerGrid))
         }
         return ships
     }
 
     // A function that prevents overlapping ships.
-    override fun overlap(ship: Ship, grid: MutableList<Ship>): Boolean {
+    private fun overlap(ship: Ship, ships: MutableList<Ship>, grid:MyGrid): Boolean {
         for (row in ship.rowIndices) {
             for (column in ship.columnIndices) {
-                if (grid.contains(ship)) {
+                if (grid.getCellValue(column, row)!=0) {
                     return false
                 }
             }
         }
-        grid.add(ship)
+        ships.add(ship)
         return true
-    }
+    }**/
 
 }
