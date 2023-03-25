@@ -17,10 +17,11 @@ class MyOpponent(
         2 // Destroyer
     )
 
-    val grid = MyGrid(columns, rows, this)
+    private val grid = MyGrid(columns, rows, this)
 
     override val ships = placeShipsRandom(columns, rows, shipTypes)
 
+    //A function that places candidate ships on to the grid.
     fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
         val grid = Array(columns) { IntArray(rows) { 0 } }
         for(ship in ships) {
@@ -32,7 +33,8 @@ class MyOpponent(
         return grid
     }
 
-    fun placeShipsRandom(columns: Int, rows: Int, shipTypes: IntArray): List<Ship> {
+    //A function that randomly picks where a ship can be placed.
+    private fun placeShipsRandom(columns: Int, rows: Int, shipTypes: IntArray): List<Ship> {
         val ships = (mutableListOf <Ship>())
         for(ship in shipTypes){
             do {
@@ -75,7 +77,7 @@ class MyOpponent(
         return ships
     }
 
-    // A function that prevents overlapping ships.
+    // A function that prevents overlapping ships. CURRENTLY BROKEN
     private fun overlap(ship: Ship, ships: MutableList<Ship>, grid:MyGrid): Boolean {
         for (row in ship.rowIndices) {
             for (column in ship.columnIndices) {
@@ -88,8 +90,6 @@ class MyOpponent(
         return true
     }
 
-    /**override val ships: List<Ship>
-        get() = ships**/
 
     override fun shipAt(column: Int, row: Int): BattleshipOpponent.ShipInfo<Ship>? {
         return TODO()
