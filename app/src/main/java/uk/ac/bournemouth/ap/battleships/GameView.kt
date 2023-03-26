@@ -19,8 +19,6 @@ class GameView: View {
 
     private val redGame = MyBattleShipGame(10,10)
 
-    //private val redShips = redGame.redPlayer.ships
-
     private val redGrid = redGame.redPlayerGrid
 
     private val colCount:Int get() = redGame.columns+1

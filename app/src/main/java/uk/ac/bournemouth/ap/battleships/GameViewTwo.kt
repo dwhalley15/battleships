@@ -19,8 +19,6 @@ class GameViewTwo: View {
 
     private val blueGame = MyBattleShipGame(10,10)
 
-    //private val redShips = redGame.redPlayer.ships
-
     private val blueGrid = blueGame.bluePlayerGrid
 
     private val colCount:Int get() = blueGame.columns+1
