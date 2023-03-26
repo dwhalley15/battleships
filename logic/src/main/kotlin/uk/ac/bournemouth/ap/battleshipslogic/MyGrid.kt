@@ -11,18 +11,8 @@ class MyGrid(
     override val opponent: BattleshipOpponent
 ) : BattleshipGrid{
 
-    val grid = Array(columns) { IntArray(rows) { 0 } }
-
     override val shipsSunk: BooleanArray
         get() = TODO("Not yet implemented")
-
-    fun createGrid(): Array<IntArray> {
-        return grid
-    }
-
-    fun getCellValue(column: Int, row:Int): Int{
-        return grid[column][row]
-    }
 
     override fun get(column: Int, row: Int): GuessCell {
         TODO("Not yet implemented")

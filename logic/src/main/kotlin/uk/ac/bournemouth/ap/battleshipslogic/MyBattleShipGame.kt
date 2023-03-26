@@ -9,9 +9,9 @@ class MyBattleShipGame(override val columns: Int, override val rows: Int) : Batt
 
     val redPlayerGrid = redPlayer.placeShipsOnGrid(redPlayer.ships)
 
-    private val bluePLayer = MyOpponent(columns, rows)
+    //private val bluePLayer = MyOpponent(columns, rows)
 
-    val bluePlayerGrid = bluePLayer.placeShipsOnGrid(bluePLayer.ships)
+    //val bluePlayerGrid = bluePLayer.placeShipsOnGrid(bluePLayer.ships)
 
 
 }

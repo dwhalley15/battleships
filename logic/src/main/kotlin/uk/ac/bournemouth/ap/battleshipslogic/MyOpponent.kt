@@ -72,21 +72,22 @@ class MyOpponent(
                         }
                 }
             }
-            while(!overlap(candidate, ships, grid))
+            while(!overlap(candidate, ships))
         }
         return ships
     }
 
     // A function that prevents overlapping ships. CURRENTLY BROKEN
-    private fun overlap(ship: Ship, ships: MutableList<Ship>, grid:MyGrid): Boolean {
-        for (row in ship.rowIndices) {
-            for (column in ship.columnIndices) {
-                if (grid.getCellValue(column, row)!=0) {
+    private fun overlap(candidate: Ship, ships: MutableList<Ship>): Boolean {
+
+        for(ship in ships){
+            if(candidate.rowIndices.intersect(ship.rowIndices).isNotEmpty()){
+                if(candidate.columnIndices.intersect(ship.columnIndices).isNotEmpty()){
                     return false
                 }
             }
         }
-        ships.add(ship)
+        ships.add(candidate)
         return true
     }
 
