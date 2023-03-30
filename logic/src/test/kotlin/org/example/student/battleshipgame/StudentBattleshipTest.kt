@@ -2,6 +2,7 @@ package org.example.student.battleshipgame
 
 import uk.ac.bournemouth.ap.battleshiplib.*
 import uk.ac.bournemouth.ap.battleshiplib.test.BattleshipTest
+import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
 import uk.ac.bournemouth.ap.lib.matrix.boolean.BooleanMatrix
 import kotlin.random.Random
 

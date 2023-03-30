@@ -9,13 +9,16 @@ class MyOpponent(
     override val rows: Int,
 ) : BattleshipOpponent {
 
-    private val shipTypes = intArrayOf(
+    val shipTypes = intArrayOf(
         5, // Carrier
         4, // Battleship"
         3, // Cruiser"
         3, // Submarine"
         2 // Destroyer
     )
+
+    var blueSunk = 0
+    var redSunk = 0
 
     private val grid = MyGrid(columns, rows, this)
 
@@ -25,8 +28,8 @@ class MyOpponent(
     fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
         val grid = Array(columns) { IntArray(rows) { 0 } }
         for(ship in ships) {
-            for (row in ship.top until ship.bottom+1) {
-                for (column in ship.left until ship.right+1)
+            for (column in ship.top until ship.bottom+1) {
+                for (row in ship.left until ship.right+1)
                     grid[column][row] = ship.size
             }
         }
@@ -95,6 +98,85 @@ class MyOpponent(
     override fun shipAt(column: Int, row: Int): BattleshipOpponent.ShipInfo<Ship>? {
         return TODO()
     }
+
+    //Blue players turn (blue player is the computer)
+    fun blueTurn(columns:Int, rows:Int, playerGrid:Array<IntArray>, ships: List<Ship>): Array<IntArray>{
+        var guessCell = mutableListOf<Int>()
+        do {
+            guessCell = randomGuess(columns, rows)
+        }
+        while(!isGuessValid(guessCell, playerGrid))
+
+        if(isGuessHit(guessCell, playerGrid)){
+            playerGrid[guessCell[0]][guessCell[1]] = 6 //hit
+                blueSunk = isSunk(ships, playerGrid, blueSunk)
+        }
+        else  if(playerGrid[guessCell[0]][guessCell[1]] == 0){
+            playerGrid[guessCell[0]][guessCell[1]] = 1 //miss
+        }
+        return playerGrid
+    }
+
+    //Guess a cell by randomly selecting a column and row int.
+    fun randomGuess(columns: Int, rows: Int): MutableList<Int> {
+        val guessColumn = Random.nextInt(0, columns)
+        val guessRow = Random.nextInt(0, rows)
+        return mutableListOf(guessColumn, guessRow)
+    }
+
+    //Check that a selected cell has not been shot at before.
+    fun isGuessValid(guessCell:MutableList<Int>, playerGrid:Array<IntArray>): Boolean{
+        return playerGrid[guessCell[0]][guessCell[1]] != 1 && playerGrid[guessCell[0]][guessCell[1]] != 6 && playerGrid[guessCell[0]][guessCell[1]] != 7
+    }
+
+    fun isGuessHit(guessCell:MutableList<Int>, playerGrid:Array<IntArray>): Boolean{
+        return playerGrid[guessCell[0]][guessCell[1]] == 2 || playerGrid[guessCell[0]][guessCell[1]] == 3 || playerGrid[guessCell[0]][guessCell[1]] ==  4 || playerGrid[guessCell[0]][guessCell[1]] ==  5
+    }
+
+
+    //Confirms if a ship has been sunk.
+    fun isSunk(ships: List<Ship>, grid: Array<IntArray>, sunk: Int): Int{
+        var sunken = sunk
+        for(ship in ships){
+            var isHit = 0
+            for(column in ship.top until ship.bottom+1){
+                for(row in ship.left until ship.right+1){
+                    if(grid[column][row] == 6){
+                        isHit += 1
+                    }
+                }
+            }
+            if(isHit == ship.size){
+                for(column in ship.top until ship.bottom+1){
+                    for(row in ship.left until ship.right+1){
+                        grid[column][row] = 7
+                    }
+                }
+                sunken += 1
+            }
+        }
+        return sunken
+    }
+
+
+    //For debug purposes should be removed later for human player turn
+    fun redTurn(columns:Int, rows:Int, playerGrid:Array<IntArray>): Array<IntArray>{
+        var guessCell = mutableListOf<Int>()
+        do {
+            guessCell = randomGuess(columns, rows)
+        }
+        while(!isGuessValid(guessCell, playerGrid))
+
+        if(isGuessHit(guessCell, playerGrid)){
+            playerGrid[guessCell[0]][guessCell[1]] = 6 //hit
+            redSunk = isSunk(ships, playerGrid, redSunk)
+        }
+        else if(playerGrid[guessCell[0]][guessCell[1]] == 0){
+            playerGrid[guessCell[0]][guessCell[1]] = 1 //miss
+        }
+        return playerGrid
+    }
+
 
 
 

@@ -14,4 +14,15 @@ class MyBattleShipGame(override val columns: Int, override val rows: Int) : Batt
     val bluePlayerGrid = bluePLayer.placeShipsOnGrid(bluePLayer.ships)
 
 
+    //Plays a turn.
+    fun playTurn(turn: Int): Array<IntArray> {
+        return bluePLayer.blueTurn(columns, rows, bluePlayerGrid, bluePLayer.ships)
+    }
+
+    //Confirms if the game is over.
+    fun isGameOver(sunk:Int): Boolean{
+        return sunk == redPlayer.shipTypes.size
+    }
+
+
 }

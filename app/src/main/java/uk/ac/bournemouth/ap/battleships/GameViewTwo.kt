@@ -19,7 +19,7 @@ class GameViewTwo: View {
 
     private val blueGame = MyBattleShipGame(10,10)
 
-    private val blueGrid = blueGame.bluePlayerGrid
+    private var blueGrid = blueGame.bluePlayerGrid
 
     private val colCount:Int get() = blueGame.columns+1
     private val rowCount:Int get() = blueGame.rows+1
@@ -141,9 +141,18 @@ class GameViewTwo: View {
             for(y in 2..rowCount){
 
                 //when(game.guess) returns hit, miss, or sunk else unsigned
-                if(blueGrid[x-2][y-2] != 0){
+                if(blueGrid[x-2][y-2] == 2 || blueGrid[x-2][y-2] == 3 || blueGrid[x-2][y-2] == 4 ||blueGrid[x-2][y-2] == 5){
                     canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, shipPaint)
                     canvas.drawText(blueGrid[x-2][y-2].toString(), x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, wordPaint)
+                }
+                else if(blueGrid[x-2][y-2] == 1){
+                    canvas.drawCircle(x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2,radius, circlePaint)
+                }
+                else if(blueGrid[x-2][y-2] == 6){
+                    canvas.drawText("X", x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, xPaint)
+                }
+                else if(blueGrid[x-2][y-2] == 7){
+                    canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, sunkPaint)
                 }
                 else{
                     canvas.drawPoint(x * cellWidth - cellWidth / 2, y * cellHeight - cellHeight / 2, dotPaint)
@@ -164,5 +173,14 @@ class GameViewTwo: View {
         }
     }
 
+    fun play():Unit{
+        var turn = 1
+        while(turn <= 80){
+            blueGrid = blueGame.playTurn(turn)
+            invalidate()
+            turn++
+        }
+    }
 
+    val run = play()
 }
