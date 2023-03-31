@@ -5,23 +5,32 @@ import uk.ac.bournemouth.ap.battleshiplib.BattleShipGame
 class MyBattleShipGame(override val columns: Int, override val rows: Int) : BattleShipGame {
 
 
-    private val redPlayer = MyOpponent(columns, rows)
+    val redPlayer = MyOpponent(columns, rows)
 
-    val redPlayerGrid = redPlayer.placeShipsOnGrid(redPlayer.ships)
+    var redPlayerGrid = redPlayer.placeShipsOnGrid(redPlayer.ships)
 
-    private val bluePLayer = MyOpponent(columns, rows)
+    val bluePlayer = MyOpponent(columns, rows)
 
-    val bluePlayerGrid = bluePLayer.placeShipsOnGrid(bluePLayer.ships)
+    var bluePlayerGrid = bluePlayer.placeShipsOnGrid(bluePlayer.ships)
 
+    private var turn:Int = 1
 
     //Plays a turn.
-    fun playTurn(turn: Int): Array<IntArray> {
-        return bluePLayer.blueTurn(columns, rows, bluePlayerGrid, bluePLayer.ships)
+    fun playTurn(): Array<IntArray> {
+        return if(turn == 1){
+            redPlayerGrid = redPlayer.redTurn(columns, rows, redPlayerGrid, redPlayer.ships)
+            turn = 2
+            redPlayerGrid
+        } else{
+            bluePlayerGrid = bluePlayer.blueTurn(columns, rows, bluePlayerGrid, bluePlayer.ships)
+            turn = 1
+            bluePlayerGrid
+        }
     }
 
     //Confirms if the game is over.
-    fun isGameOver(sunk:Int): Boolean{
-        return sunk == redPlayer.shipTypes.size
+    fun isGameOver(player: MyOpponent, sunk:Int): Boolean{
+        return sunk == player.shipTypes.size
     }
 
 

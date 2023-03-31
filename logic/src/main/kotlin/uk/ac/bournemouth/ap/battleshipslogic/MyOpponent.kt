@@ -160,7 +160,7 @@ class MyOpponent(
 
 
     //For debug purposes should be removed later for human player turn
-    fun redTurn(columns:Int, rows:Int, playerGrid:Array<IntArray>): Array<IntArray>{
+    fun redTurn(columns: Int, rows: Int, playerGrid: Array<IntArray>, ships: List<Ship>): Array<IntArray>{
         var guessCell = mutableListOf<Int>()
         do {
             guessCell = randomGuess(columns, rows)
@@ -169,7 +169,7 @@ class MyOpponent(
 
         if(isGuessHit(guessCell, playerGrid)){
             playerGrid[guessCell[0]][guessCell[1]] = 6 //hit
-            redSunk = isSunk(ships, playerGrid, redSunk)
+            redSunk = isSunk(this.ships, playerGrid, redSunk)
         }
         else if(playerGrid[guessCell[0]][guessCell[1]] == 0){
             playerGrid[guessCell[0]][guessCell[1]] = 1 //miss

@@ -1,9 +1,11 @@
 package uk.ac.bournemouth.ap.battleships
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
 import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
@@ -19,7 +21,7 @@ class GameView: View {
 
     private val redGame = MyBattleShipGame(10,10)
 
-    private val redGrid = redGame.redPlayerGrid
+    private var redGrid = redGame.redPlayerGrid
 
     private val colCount:Int get() = redGame.columns+1
     private val rowCount:Int get() = redGame.rows+1
@@ -140,10 +142,19 @@ class GameView: View {
         for(x in 2..colCount){
             for(y in 2..rowCount){
 
-                //when(game.guess) returns hit, miss, or sunk else unsigned
-                if(redGrid[x-2][y-2] != 0){
+
+                if(redGrid[x-2][y-2] == 2 || redGrid[x-2][y-2] == 3 || redGrid[x-2][y-2] == 4 ||redGrid[x-2][y-2] == 5){
                     canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, shipPaint)
                     canvas.drawText(redGrid[x-2][y-2].toString(), x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, wordPaint)
+                }
+                else if(redGrid[x-2][y-2] == 1){
+                    canvas.drawCircle(x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2,radius, circlePaint)
+                }
+                else if(redGrid[x-2][y-2] == 6){
+                    canvas.drawText("X", x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, xPaint)
+                }
+                else if(redGrid[x-2][y-2] == 7){
+                    canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, sunkPaint)
                 }
                 else{
                     canvas.drawPoint(x * cellWidth - cellWidth / 2, y * cellHeight - cellHeight / 2, dotPaint)
@@ -160,9 +171,25 @@ class GameView: View {
 
                 //Sunk token
                 //canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
+
             }
         }
     }
 
+    //Currently unsure how to switch between players. This function is for debug purposes will be removed later.
+    fun play():Unit {
+        var turn = 0
+        while (turn < 160) {
+            redGrid = redGame.playTurn()
+            invalidate()
+            if (redGame.isGameOver(redGame.redPlayer, redGame.redPlayer.redSunk)) {
+                Snackbar
+                    .make(this@GameView, "Red wins", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+            turn++
+        }
+    }
 
+    val run = play()
 }
