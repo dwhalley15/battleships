@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
+import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
 import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
 import java.util.concurrent.TimeUnit
@@ -17,14 +18,17 @@ class GameViewTwo: View {
         context,
         attrs,
         defStyleAttr
+
     )
 
-    private val blueGame = MyBattleShipGame(10,10)
+    val game = MyBattleShipGame(10,10)
 
-    private var blueGrid = blueGame.bluePlayerGrid
+    //private val blueGame = MyBattleShipGame(10,10)
 
-    private val colCount:Int get() = blueGame.columns+1
-    private val rowCount:Int get() = blueGame.rows+1
+    //private var blueGrid = blueGame.bluePlayerGrid
+
+    private val colCount:Int get() = game.columns+1
+    private val rowCount:Int get() = game.rows+1
 
     private val backPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -142,6 +146,47 @@ class GameViewTwo: View {
         for(x in 2..colCount){
             for(y in 2..rowCount){
 
+                if(game.bluePlayer.shipAt(x-2,y-2) != null){
+                    canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, shipPaint)
+                    canvas.drawText(game.bluePlayer.shipAt(x-2,y-2)!!.index.toString(), x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, wordPaint)
+                }
+
+                if(game.redGrid.data[x - 2, y - 2] == GuessCell.MISS){
+                    canvas.drawCircle(
+                        x * cellWidth - cellWidth / 2,
+                        y * cellHeight - cellHeight / 2,
+                        radius,
+                        circlePaint
+                    )
+                }
+                else if(game.bluePlayer.shipAt(x-2,y-2) != null && game.redGrid.data[x - 2, y - 2] == GuessCell.HIT(game.bluePlayer.shipAt(x-2,y-2)!!.index)){
+                    canvas.drawText(
+                        "X",
+                        x * cellWidth - cellWidth / 2,
+                        y * cellHeight - cellHeight / 2 + textOffset,
+                        xPaint
+                    )
+                }
+                else if(game.bluePlayer.shipAt(x-2,y-2) != null && game.redGrid.data[x - 2, y - 2] == GuessCell.SUNK(game.bluePlayer.shipAt(x-2,y-2)!!.index)){
+                    canvas.drawRect(
+                        (x - 1) * cellWidth,
+                        (y - 1) * cellHeight,
+                        (x) * cellWidth,
+                        (y) * cellHeight,
+                        sunkPaint
+                    )
+                }
+                /*
+                else {
+                    canvas.drawPoint(
+                        x * cellWidth - cellWidth / 2,
+                        y * cellHeight - cellHeight / 2,
+                        dotPaint
+                    )
+                }*/
+
+                /*
+
                 if(blueGrid[x-2][y-2] == 2 || blueGrid[x-2][y-2] == 3 || blueGrid[x-2][y-2] == 4 ||blueGrid[x-2][y-2] == 5){//Show ships
                     canvas.drawRect((x-1)*cellWidth, (y-1)*cellHeight, (x)*cellWidth, (y)*cellHeight, shipPaint)
                     canvas.drawText(blueGrid[x-2][y-2].toString(), x*cellWidth-cellWidth/2,y*cellHeight-cellHeight/2 + textOffset, wordPaint)
@@ -171,6 +216,8 @@ class GameViewTwo: View {
                 //Sunk token
                 //canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
 
+                 */
+
             }
         }
     }
@@ -178,14 +225,9 @@ class GameViewTwo: View {
     //Currently unsure how to switch between players. This function is for debug purposes will be removed later.
     fun play():Unit{
         var turn = 0
-        while (turn < 160) {
-            blueGrid = blueGame.playTurn()
+        while (turn < 80) {
+            game.playTurn(10, 10, game.redGrid)
             invalidate()
-            if(blueGame.isGameOver(blueGame.bluePlayer, blueGame.bluePlayer.blueSunk)){
-                Snackbar
-                    .make(this@GameViewTwo, "Blue wins", Snackbar.LENGTH_SHORT)
-                    .show()
-            }
             turn++
         }
     }

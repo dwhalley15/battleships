@@ -2,11 +2,13 @@ package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.Ship
+import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
 
 class MyOpponent(
     override val columns: Int,
     override val rows: Int,
+    //override val ships: List<MyShip>
 ) : BattleshipOpponent {
 
     val shipTypes = intArrayOf(
@@ -20,9 +22,7 @@ class MyOpponent(
     var blueSunk = 0
     var redSunk = 0
 
-    private val grid = MyGrid(columns, rows, this)
-
-    override val ships = placeShipsRandom(columns, rows, shipTypes)
+    override val ships = randomShipPlacement(columns, rows, shipTypes, Random)
 
     //A function that places candidate ships on to the grid.
     fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
@@ -36,8 +36,60 @@ class MyOpponent(
         return grid
     }
 
-    //A function that randomly picks where a ship can be placed.
-    private fun placeShipsRandom(columns: Int, rows: Int, shipTypes: IntArray): List<Ship> {
+    //New random place ship function that brings in type random and returns List of type MyShip
+    private fun randomShipPlacement(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<MyShip>{
+        val ships = (mutableListOf<MyShip>())
+        for(ship in shipTypes){
+            do{
+                val direction = random.nextInt(0, 2)
+                val top: Int =
+                    if (direction == 0) {
+                        random.nextInt(0, rows)
+                    }
+                    else{
+                        random.nextInt(0, rows - ship)
+                    }
+                val left: Int =
+                    if (direction == 0) {
+                        random.nextInt(0, columns - ship)
+                    }
+                    else{
+                        random.nextInt(0, columns)
+                    }
+                val bottom: Int =
+                    if (direction == 0) {
+                        top
+                    } else {
+                        top + (ship - 1)
+                    }
+                val right: Int =
+                    if (direction == 0) {
+                        left + (ship - 1)
+                    } else {
+                        left
+                    }
+                val candidate = MyShip(top, left, bottom, right)
+            }
+            while(!overlaping(candidate, ships))
+        }
+        return ships
+    }
+
+    //New version of overlap the same just the type is MyShip not Ship
+    private fun overlaping(candidate: MyShip, ships: MutableList<MyShip>): Boolean{
+        for(ship in ships){
+            if(candidate.rowIndices.intersect(ship.rowIndices).isNotEmpty()){
+                if(candidate.columnIndices.intersect(ship.columnIndices).isNotEmpty()){
+                    return false
+                }
+            }
+        }
+        ships.add(candidate)
+        return true
+    }
+
+    //THIS IS AN OLD VERSION THAT MAY BE DELETED LATER
+    private fun placeShipsRandom(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<Ship> {
         val ships = (mutableListOf <Ship>())
         for(ship in shipTypes){
             do {
@@ -45,21 +97,21 @@ class MyOpponent(
                     //Gets the ship size from the list of ships.
                     val length = ship
                     // Randomly selects direction 0 = horizontal, 1 = vertical.
-                    val direction = Random.nextInt(0, 2)
+                    val direction = random.nextInt(0, 2)
                     // Randomly picks the top value depending on direction, then works out left, bottom and right depending on top and direction.
                     override val top: Int =
                         if (direction == 0) {
-                            Random.nextInt(0, rows)
+                            random.nextInt(0, rows)
                         }
                         else{
-                            Random.nextInt(0, rows - length)
+                            random.nextInt(0, rows - length)
                         }
                     override val left: Int =
                         if (direction == 0) {
-                            Random.nextInt(0, columns - length)
+                            random.nextInt(0, columns - length)
                         }
                         else{
-                            Random.nextInt(0, columns)
+                            random.nextInt(0, columns)
                         }
                     override val bottom: Int =
                         if (direction == 0) {
@@ -80,9 +132,8 @@ class MyOpponent(
         return ships
     }
 
-    // A function that prevents overlapping ships. CURRENTLY BROKEN
+    //THIS IS AN OLD VERSION THAT MAY BE DELETED LATER
     private fun overlap(candidate: Ship, ships: MutableList<Ship>): Boolean {
-
         for(ship in ships){
             if(candidate.rowIndices.intersect(ship.rowIndices).isNotEmpty()){
                 if(candidate.columnIndices.intersect(ship.columnIndices).isNotEmpty()){
@@ -94,43 +145,50 @@ class MyOpponent(
         return true
     }
 
-
-    override fun shipAt(column: Int, row: Int): BattleshipOpponent.ShipInfo<Ship>? {
-        return TODO()
+    //Determines what ship is at a position given a column and row. If no ship is present returns null.
+    override fun shipAt(column: Int, row: Int): BattleshipOpponent.ShipInfo<MyShip>? {
+        val ship = ships.find{it.containsCoordinate(column, row)}
+        return if(ship != null){
+            val index = ships.indexOf(ship)
+            BattleshipOpponent.ShipInfo(index, ship)
+        }
+        else{
+            null
+        }
     }
 
     //Blue players turn (blue player is the computer)
     fun blueTurn(columns:Int, rows:Int, playerGrid:Array<IntArray>, ships: List<Ship>): Array<IntArray>{
-        var guessCell = mutableListOf<Int>()
+        var guessCell: Coordinate
         do {
             guessCell = randomGuess(columns, rows)
         }
         while(!isGuessValid(guessCell, playerGrid))
 
         if(isGuessHit(guessCell, playerGrid)){
-            playerGrid[guessCell[0]][guessCell[1]] = 6 //hit
+            playerGrid[guessCell.x][guessCell.y] = 6 //hit
                 blueSunk = isSunk(ships, playerGrid, blueSunk)
         }
-        else  if(playerGrid[guessCell[0]][guessCell[1]] == 0){
-            playerGrid[guessCell[0]][guessCell[1]] = 1 //miss
+        else  if(playerGrid[guessCell.x][guessCell.y] == 0){
+            playerGrid[guessCell.x][guessCell.y] = 1 //miss
         }
         return playerGrid
     }
 
     //Guess a cell by randomly selecting a column and row int.
-    fun randomGuess(columns: Int, rows: Int): MutableList<Int> {
+    fun randomGuess(columns: Int, rows: Int): Coordinate {
         val guessColumn = Random.nextInt(0, columns)
         val guessRow = Random.nextInt(0, rows)
-        return mutableListOf(guessColumn, guessRow)
+        return Coordinate(guessColumn, guessRow)
     }
 
     //Check that a selected cell has not been shot at before.
-    fun isGuessValid(guessCell:MutableList<Int>, playerGrid:Array<IntArray>): Boolean{
-        return playerGrid[guessCell[0]][guessCell[1]] != 1 && playerGrid[guessCell[0]][guessCell[1]] != 6 && playerGrid[guessCell[0]][guessCell[1]] != 7
+    fun isGuessValid(guessCell:Coordinate, playerGrid:Array<IntArray>): Boolean{
+        return playerGrid[guessCell.x][guessCell.y] != 1 && playerGrid[guessCell.x][guessCell.y] != 6 && playerGrid[guessCell.x][guessCell.y] != 7
     }
 
-    fun isGuessHit(guessCell:MutableList<Int>, playerGrid:Array<IntArray>): Boolean{
-        return playerGrid[guessCell[0]][guessCell[1]] == 2 || playerGrid[guessCell[0]][guessCell[1]] == 3 || playerGrid[guessCell[0]][guessCell[1]] ==  4 || playerGrid[guessCell[0]][guessCell[1]] ==  5
+    fun isGuessHit(guessCell:Coordinate, playerGrid:Array<IntArray>): Boolean{
+        return playerGrid[guessCell.x][guessCell.y] == 2 || playerGrid[guessCell.x][guessCell.y] == 3 || playerGrid[guessCell.x][guessCell.y] ==  4 || playerGrid[guessCell.x][guessCell.y] ==  5
     }
 
 
@@ -160,19 +218,19 @@ class MyOpponent(
 
 
     //For debug purposes should be removed later for human player turn
-    fun redTurn(columns: Int, rows: Int, playerGrid: Array<IntArray>, ships: List<Ship>): Array<IntArray>{
-        var guessCell = mutableListOf<Int>()
+    fun redTurn(columns:Int, rows:Int, playerGrid:Array<IntArray>, ships: List<Ship>): Array<IntArray>{
+        var guessCell: Coordinate
         do {
             guessCell = randomGuess(columns, rows)
         }
         while(!isGuessValid(guessCell, playerGrid))
 
         if(isGuessHit(guessCell, playerGrid)){
-            playerGrid[guessCell[0]][guessCell[1]] = 6 //hit
-            redSunk = isSunk(this.ships, playerGrid, redSunk)
+            playerGrid[guessCell.x][guessCell.y] = 6 //hit
+            redSunk = isSunk(ships, playerGrid, redSunk)
         }
-        else if(playerGrid[guessCell[0]][guessCell[1]] == 0){
-            playerGrid[guessCell[0]][guessCell[1]] = 1 //miss
+        else  if(playerGrid[guessCell.x][guessCell.y] == 0){
+            playerGrid[guessCell.x][guessCell.y] = 1 //miss
         }
         return playerGrid
     }
