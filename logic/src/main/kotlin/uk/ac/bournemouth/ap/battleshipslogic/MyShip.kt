@@ -20,7 +20,8 @@ class MyShip(
     //Returns true if hits equal size.
     val isSunk: Boolean
         get() = hits == size
-/*
+
+/* THIS IS OLD AND CAN BE DELETED LATER
     private val shipTypes = intArrayOf(
         5, // Carrier
         4, // Battleship"

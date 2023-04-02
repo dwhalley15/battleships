@@ -15,7 +15,7 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
 
     var blueGrid = MyGrid(columns, rows, redPlayer)
 
-    private var turn:Int = 1
+    var turn:Int = Random.nextInt(2)+1
 
 
     //Plays a computer turn

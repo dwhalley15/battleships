@@ -5,8 +5,10 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
+import java.util.concurrent.TimeUnit
 
 
 class GameView: View {
@@ -18,7 +20,7 @@ class GameView: View {
         defStyleAttr
     )
 
-    private val game = MyBattleShipGame(10,10)
+    var game = MyBattleShipGame(10,10)
 
     private val colCount:Int get() = game.columns
     private val rowCount:Int get() = game.rows
@@ -108,7 +110,7 @@ class GameView: View {
         val canvasWidth = width.toFloat()
         val canvasHeight = height.toFloat()
 
-        //Measure size for each grid.
+        //Measure size for each grid. Maybe do something here with width and height which is greater?
         val gridWidth = (canvasWidth/2)
         val gridHeight = (canvasHeight/2)
 
@@ -358,6 +360,29 @@ class GameView: View {
     }
 
     //Currently unsure how to switch between players. This function is for debug purposes will be removed later.
+    fun playGame():Unit{
+        while(!game.blueGrid.isFinished && !game.redGrid.isFinished){
+            if(game.turn == 1){
+                game.playTurn(game.columns, game.rows, game.blueGrid)
+            }
+            else{
+                game.playTurn(game.columns, game.rows, game.redGrid)
+            }
+            //TimeUnit.SECONDS.sleep(1L)
+            invalidate()
+        }
+        val msg: String = if(game.turn == 1){
+            "Red"
+        } else{
+            "Blue"
+        }
+        //TimeUnit.SECONDS.sleep(1L)
+        invalidate()
+        /*Snackbar
+            .make(this@GameView, "$msg Wins", Snackbar.LENGTH_SHORT)
+            .show()*/
+    }
+
     fun play():Unit{
         var turn = 0
         while (turn < 80) {
@@ -368,5 +393,5 @@ class GameView: View {
         }
     }
 
-    val run = play()
+    val run = playGame()
 }

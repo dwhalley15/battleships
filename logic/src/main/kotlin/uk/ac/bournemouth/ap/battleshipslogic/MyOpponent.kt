@@ -19,7 +19,7 @@ class MyOpponent(
 
     override val ships = randomShipPlacement(columns, rows, shipTypes, Random)
 
-    /*A function that places candidate ships on to the grid OLD TO BE DELETED
+    /*OLD TO BE DELETED
     fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
         val grid = Array(columns) { IntArray(rows) { 0 } }
         for(ship in ships) {
@@ -31,7 +31,7 @@ class MyOpponent(
         return grid
     }*/
 
-    //New random place ship function that brings in type random and returns List of type MyShip
+    //A random place ship function that brings in type random and returns List of type MyShip
     private fun randomShipPlacement(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<MyShip>{
         val ships = (mutableListOf<MyShip>())
         for(ship in shipTypes){

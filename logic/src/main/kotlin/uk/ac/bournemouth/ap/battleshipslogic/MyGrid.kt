@@ -25,6 +25,7 @@ class MyGrid(
     override val shipsSunk = BooleanArray(opponent.shipTypes.size)
 
 
+
     override fun get(column: Int, row: Int): GuessCell {
         return data[column, row]
     }
@@ -40,6 +41,7 @@ class MyGrid(
                         data[col, r] = GuessCell.SUNK(index)
                     }
                 }
+                shipsSunk[index] = true
                 GuessResult.SUNK(index)
             }
             GuessResult.HIT(index)
