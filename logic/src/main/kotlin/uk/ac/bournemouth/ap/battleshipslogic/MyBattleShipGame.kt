@@ -29,9 +29,15 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
         turn = (turn % 2)+1
     }
 
-    //Confirms if the game is over. CURRENTLY NOT USED MAY NOT BELONG HERE
-    fun isGameOver(player: MyOpponent, sunk:Int): Boolean{
-        return sunk == player.shipTypes.size
+
+    //This plays a game mode computer vs computer
+    fun playGame(){
+        if(turn == 1){
+            playTurn(columns, rows, blueGrid)
+        }
+        else{
+            playTurn(columns, rows, redGrid)
+        }
     }
 
     /*THIS IS OLD AND CAN BE DELETED LATER.

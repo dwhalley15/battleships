@@ -355,13 +355,27 @@ class GameView: View {
                 //Sunk token
                 //canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
                 */
+        if(!game.blueGrid.isFinished && !game.redGrid.isFinished){
+            game.playGame()
+            TimeUnit.SECONDS.sleep(1L)
+            invalidate()
+        }
+        else{
+            val msg: String = if(game.turn == 1){
+                "Blue"
+            } else{
+                "Red"
+            }
+            Snackbar
+                .make(this@GameView, "$msg Wins", Snackbar.LENGTH_SHORT)
+                .show()
+        }
 
 
     }
 
-    //Currently unsure how to switch between players. This function is for debug purposes will be removed later.
+    /*Currently unsure how to switch between players. This function is for debug purposes will be removed later.
     fun playGame():Unit{
-        while(!game.blueGrid.isFinished && !game.redGrid.isFinished){
             if(game.turn == 1){
                 game.playTurn(game.columns, game.rows, game.blueGrid)
             }
@@ -369,19 +383,15 @@ class GameView: View {
                 game.playTurn(game.columns, game.rows, game.redGrid)
             }
             //TimeUnit.SECONDS.sleep(1L)
-            invalidate()
-        }
-        val msg: String = if(game.turn == 1){
-            "Red"
-        } else{
-            "Blue"
+            //invalidate()
         }
         //TimeUnit.SECONDS.sleep(1L)
-        invalidate()
+        //invalidate()
         /*Snackbar
             .make(this@GameView, "$msg Wins", Snackbar.LENGTH_SHORT)
             .show()*/
-    }
+
+
 
     fun play():Unit{
         var turn = 0
@@ -393,5 +403,5 @@ class GameView: View {
         }
     }
 
-    val run = playGame()
+    val run = playGame()*/
 }
