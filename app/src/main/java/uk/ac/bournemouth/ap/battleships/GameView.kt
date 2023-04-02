@@ -1,18 +1,13 @@
 package uk.ac.bournemouth.ap.battleships
 
-import android.annotation.SuppressLint
+
 import android.content.Context
-import android.content.Intent
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
-import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
-import uk.ac.bournemouth.ap.battleshiplib.shipAt
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
-import uk.ac.bournemouth.ap.battleshipslogic.MyGrid
-import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
+
 
 class GameView: View {
     constructor(context: Context?) : super(context)
@@ -23,13 +18,7 @@ class GameView: View {
         defStyleAttr
     )
 
-    val game = MyBattleShipGame(10,10)
-
-
-    /*private val redGame = MyBattleShipGame(10,10)
-
-    private var redGrid = redGame.redPlayerGrid*/
-
+    private val game = MyBattleShipGame(10,10)
 
     private val colCount:Int get() = game.columns
     private val rowCount:Int get() = game.rows
@@ -225,9 +214,11 @@ class GameView: View {
                 }
             }
         }
+        //Work out the gap between grids based on canvas height somehow.
+        val gap = canvasHeight
 
         //Draw background for bottom grid.
-        canvas.drawRect(0f,gridHeight+10f, canvasWidth, canvasHeight, backPaint)
+        canvas.drawRect(0f,gridHeight+20f, canvasWidth, canvasHeight, backPaint)
 
 
         /*Draw bottom column headers
@@ -256,12 +247,12 @@ class GameView: View {
 
         //Draw bottom grid column lines
         for(x in 0..colCount){
-            canvas.drawLine(x * cellWidth, gridHeight+10f, x * cellWidth, canvasHeight, linePaint)
+            canvas.drawLine(x * cellWidth, gridHeight+20f, x * cellWidth, canvasHeight, linePaint)
         }
 
         //Draw bottom grid row lines
         for(y in 0..rowCount){
-            canvas.drawLine(0f, (gridHeight+10f)+y * cellHeight, canvasWidth, (gridHeight+10f)+y * cellHeight, linePaint)
+            canvas.drawLine(0f, (gridHeight+20f)+y * cellHeight, canvasWidth, (gridHeight+20f)+y * cellHeight, linePaint)
         }
 
         //Draw top cell tokens
@@ -271,15 +262,15 @@ class GameView: View {
                 if (game.redPlayer.shipAt(x - 1, y - 1) != null) {
                     canvas.drawRect(
                         (x-1) * cellWidth,
-                        gridHeight+10f+(y-1) * cellHeight,
+                        gridHeight+20f+(y-1) * cellHeight,
                         (x) * cellWidth,
-                        gridHeight+10f+(y) * cellHeight,
+                        gridHeight+20f+(y) * cellHeight,
                         shipPaint
                     )
                     canvas.drawText(
                         game.redPlayer.shipAt(x - 1, y - 1)!!.index.toString(),
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+10f)+y * cellHeight - cellHeight / 2 + textOffset,
+                        (gridHeight+20f)+y * cellHeight - cellHeight / 2 + textOffset,
                         wordPaint
                     )
                 }
@@ -287,7 +278,7 @@ class GameView: View {
                 if (game.blueGrid.data[x - 1, y - 1] == GuessCell.MISS) {
                     canvas.drawCircle(
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+10f)+y * cellHeight - cellHeight / 2,
+                        (gridHeight+20f)+y * cellHeight - cellHeight / 2,
                         radius,
                         redCirclePaint
                     )
@@ -304,7 +295,7 @@ class GameView: View {
                     canvas.drawText(
                         "X",
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+10f)+y * cellHeight - cellHeight / 2 + textOffset,
+                        (gridHeight+20f)+y * cellHeight - cellHeight / 2 + textOffset,
                         redXPaint
                     )
                 } else if (game.redPlayer.shipAt(
@@ -319,9 +310,9 @@ class GameView: View {
                 ) {
                     canvas.drawRect(
                         (x - 1) * cellWidth,
-                        gridHeight+10f+(y-1) * cellHeight,
+                        gridHeight+20f+(y-1) * cellHeight,
                         (x) * cellWidth,
-                        gridHeight+10f+(y) * cellHeight,
+                        gridHeight+20f+(y) * cellHeight,
                         redSunkPaint
                     )
                 }

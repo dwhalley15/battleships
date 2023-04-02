@@ -1,8 +1,6 @@
 package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
-import uk.ac.bournemouth.ap.battleshiplib.Ship
-import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
 
 class MyOpponent(
@@ -19,12 +17,9 @@ class MyOpponent(
         2 // Destroyer
     )
 
-    var blueSunk = 0
-    var redSunk = 0
-
     override val ships = randomShipPlacement(columns, rows, shipTypes, Random)
 
-    //A function that places candidate ships on to the grid.
+    /*A function that places candidate ships on to the grid OLD TO BE DELETED
     fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
         val grid = Array(columns) { IntArray(rows) { 0 } }
         for(ship in ships) {
@@ -34,7 +29,7 @@ class MyOpponent(
             }
         }
         return grid
-    }
+    }*/
 
     //New random place ship function that brings in type random and returns List of type MyShip
     private fun randomShipPlacement(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<MyShip>{
@@ -88,7 +83,19 @@ class MyOpponent(
         return true
     }
 
-    //THIS IS AN OLD VERSION THAT MAY BE DELETED LATER
+    //Determines what ship is at a position given a column and row. If no ship is present returns null.
+    override fun shipAt(column: Int, row: Int): BattleshipOpponent.ShipInfo<MyShip>? {
+        val ship = ships.find{it.containsCoordinate(column, row)}
+        return if(ship != null){
+            val index = ships.indexOf(ship)
+            BattleshipOpponent.ShipInfo(index, ship)
+        }
+        else{
+            null
+        }
+    }
+
+    /*THIS IS AN OLD VERSION THAT MAY BE DELETED LATER
     private fun placeShipsRandom(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<Ship> {
         val ships = (mutableListOf <Ship>())
         for(ship in shipTypes){
@@ -145,17 +152,7 @@ class MyOpponent(
         return true
     }
 
-    //Determines what ship is at a position given a column and row. If no ship is present returns null.
-    override fun shipAt(column: Int, row: Int): BattleshipOpponent.ShipInfo<MyShip>? {
-        val ship = ships.find{it.containsCoordinate(column, row)}
-        return if(ship != null){
-            val index = ships.indexOf(ship)
-            BattleshipOpponent.ShipInfo(index, ship)
-        }
-        else{
-            null
-        }
-    }
+
 
     //Blue players turn (blue player is the computer)
     fun blueTurn(columns:Int, rows:Int, playerGrid:Array<IntArray>, ships: List<Ship>): Array<IntArray>{
@@ -233,7 +230,7 @@ class MyOpponent(
             playerGrid[guessCell.x][guessCell.y] = 1 //miss
         }
         return playerGrid
-    }
+    }*/
 
 
 

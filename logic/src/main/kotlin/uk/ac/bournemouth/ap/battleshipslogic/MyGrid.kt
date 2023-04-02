@@ -3,7 +3,6 @@ package uk.ac.bournemouth.ap.battleshipslogic
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshiplib.GuessResult
-import uk.ac.bournemouth.ap.battleshiplib.Ship
 import uk.ac.bournemouth.ap.lib.matrix.MutableMatrix
 import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
@@ -35,9 +34,9 @@ class MyGrid(
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index
             data[column, row] = GuessCell.HIT(index)
-            if(isSunk(ship, index)){
-                for(col in ship.top..ship.bottom){
-                    for(r in ship.left..ship.right){
+            if(checkIfSunk(ship)){
+                for(col in ship.left..ship.right){
+                    for(r in ship.top..ship.bottom){
                         data[col, r] = GuessCell.SUNK(index)
                     }
                 }
@@ -62,17 +61,10 @@ class MyGrid(
         return data[guessCell.x, guessCell.y] == GuessCell.UNSET
     }
 
-    //This is currently broken maybe use a different method using the index instead.
-    fun isSunk(ship: MyShip, index: Int): Boolean{
-        var isHit = 0
-            for(column in ship.top..ship.bottom){
-                for(row in ship.left..ship.right){
-                    if(data[column, row] != GuessCell.UNSET ){
-                        isHit += 1
-                    }
-                }
-            }
-        return isHit == ship.size
+    //Adds to a ships hits value returns true if a ship as been sunk
+    private fun checkIfSunk(ship: MyShip): Boolean{
+        ship.hits++
+        return ship.isSunk
     }
 
     override fun addOnGridChangeListener(listener: BattleshipGrid.BattleshipGridListener) {

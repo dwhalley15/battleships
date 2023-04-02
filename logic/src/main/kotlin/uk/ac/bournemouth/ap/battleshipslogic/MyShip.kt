@@ -1,7 +1,6 @@
 package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.battleshiplib.Ship
-import kotlin.random.Random
 
 class MyShip(
     override val top: Int,
@@ -14,6 +13,13 @@ class MyShip(
     fun containsCoordinate(column: Int, row: Int): Boolean {
         return column in left..right && row in top..bottom
     }
+
+    //Records any hits to this ship
+    var hits = 0
+
+    //Returns true if hits equal size.
+    val isSunk: Boolean
+        get() = hits == size
 /*
     private val shipTypes = intArrayOf(
         5, // Carrier
