@@ -355,6 +355,8 @@ class GameView: View {
                 //Sunk token
                 //canvas.drawRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight, sunkPaint)
                 */
+
+        //For the computer vs computer mode this is what triggers and ends the game.
         if(!game.blueGrid.isFinished && !game.redGrid.isFinished){
             game.playGame()
             TimeUnit.SECONDS.sleep(1L)
