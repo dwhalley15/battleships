@@ -6,10 +6,17 @@ import kotlin.random.Random
 
 class MyBattleShipGame(val columns: Int, val rows: Int){
 
+    val shipTypes = intArrayOf(
+        5, // Carrier
+        4, // Battleship"
+        3, // Cruiser"
+        3, // Submarine"
+        2 // Destroyer
+    )
 
-    val redPlayer = MyOpponent(columns, rows)
+    val redPlayer = MyOpponent(columns, rows, shipTypes, Random)
 
-    val bluePlayer = MyOpponent(columns, rows)
+    val bluePlayer = MyOpponent(columns, rows, shipTypes, Random)
 
     var redGrid = MyGrid(columns, rows, bluePlayer)
 
@@ -17,6 +24,19 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
 
     var turn:Int = Random.nextInt(2)+1
 
+
+    //This plays a one player game with redplayer being the human player, blueplayer being the computer.
+    fun playerGame(column: Int, row: Int){
+        if(column < columns && row < rows){
+            if(blueGrid.isGuessValid(Coordinate(column, row))) {
+                blueGrid.shootAt(column, row)
+                blueGrid.onGridChanged(column, row)
+                playTurn(columns, rows, redGrid)
+                redGrid.onGridChanged(column, row)
+            }
+        }
+
+    }
 
     //Plays a computer turn
     fun playTurn(columns: Int, rows: Int, grid: MyGrid){

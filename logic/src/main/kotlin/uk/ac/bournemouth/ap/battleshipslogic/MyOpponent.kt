@@ -7,17 +7,19 @@ class MyOpponent(
     override val columns: Int,
     override val rows: Int,
     //override val ships: List<MyShip>
+    val shipTypes: IntArray,
+    random: Random
 ) : BattleshipOpponent {
 
-    val shipTypes = intArrayOf(
+    /*val shipTypes = intArrayOf(
         5, // Carrier
         4, // Battleship"
         3, // Cruiser"
         3, // Submarine"
         2 // Destroyer
-    )
+    )*/
 
-    override val ships = randomShipPlacement(columns, rows, shipTypes, Random)
+    override val ships = randomShipPlacement(columns, rows, shipTypes, random)
 
     /*OLD TO BE DELETED
     fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
@@ -65,13 +67,13 @@ class MyOpponent(
                     }
                 val candidate = MyShip(top, left, bottom, right)
             }
-            while(!overlaping(candidate, ships))
+            while(!overlapping(candidate, ships))
         }
         return ships
     }
 
     //New version of overlap the same just the type is MyShip not Ship
-    private fun overlaping(candidate: MyShip, ships: MutableList<MyShip>): Boolean{
+    private fun overlapping(candidate: MyShip, ships: MutableList<MyShip>): Boolean{
         for(ship in ships){
             if(candidate.rowIndices.intersect(ship.rowIndices).isNotEmpty()){
                 if(candidate.columnIndices.intersect(ship.columnIndices).isNotEmpty()){

@@ -15,15 +15,9 @@ class MyGrid(
 
     val data = MutableMatrix<GuessCell>(columns, rows) {col, row -> GuessCell.UNSET }
 
-    /* Used for debug purposes
-    init{
-        data[5,5] = GuessCell.MISS
-        data[6,6] = GuessCell.HIT(0)
-        data[7,7] = GuessCell.SUNK(0)
-    }*/
-
     override val shipsSunk = BooleanArray(opponent.shipTypes.size)
 
+    private val gridChangeListeners = mutableListOf<BattleshipGrid.BattleshipGridListener>()
 
 
     override fun get(column: Int, row: Int): GuessCell {
@@ -70,10 +64,18 @@ class MyGrid(
     }
 
     override fun addOnGridChangeListener(listener: BattleshipGrid.BattleshipGridListener) {
-        TODO("Not yet implemented")
+        if(listener !in gridChangeListeners){
+            gridChangeListeners.add(listener)
+        }
     }
 
     override fun removeOnGridChangeListener(listener: BattleshipGrid.BattleshipGridListener) {
-        TODO("Not yet implemented")
+        gridChangeListeners.remove(listener)
+    }
+
+    fun onGridChanged(column: Int, row: Int){
+        for(listener in gridChangeListeners){
+            listener.onGridChanged(this, column, row)
+        }
     }
 }

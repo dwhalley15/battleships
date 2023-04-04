@@ -14,7 +14,7 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
         rows: Int,
         ships: List<MyShip>
     ): MyOpponent {
-        return MyOpponent(columns, rows)
+        return TODO()//MyOpponent(columns, rows)
     }
 
     override fun transformShip(sourceShip: Ship): MyShip {
@@ -28,8 +28,7 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
         random: Random
     ): MyOpponent {
         // Note that the passing of random allows for repeatable testing
-        return TODO("Create an instance of StudentBattleshipOpponent for the given game size, " +
-                "target ship sizes and random generator") //MyOpponent(columns, rows, shipSizes, random)
+        return MyOpponent(columns, rows, shipSizes, random)
     }
 
     override fun createGrid(

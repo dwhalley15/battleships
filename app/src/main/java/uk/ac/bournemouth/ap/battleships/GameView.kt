@@ -4,10 +4,15 @@ package uk.ac.bournemouth.ap.battleships
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
+import androidx.core.view.GestureDetectorCompat
 import com.google.android.material.snackbar.Snackbar
+import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
+import uk.ac.bournemouth.ap.battleshipslogic.MyGrid
 import java.util.concurrent.TimeUnit
 
 
@@ -357,6 +362,7 @@ class GameView: View {
                 */
 
         //For the computer vs computer mode this is what triggers and ends the game.
+        /*
         if(!game.blueGrid.isFinished && !game.redGrid.isFinished){
             game.playGame()
             TimeUnit.SECONDS.sleep(1L)
@@ -371,9 +377,62 @@ class GameView: View {
             Snackbar
                 .make(this@GameView, "$msg Wins", Snackbar.LENGTH_SHORT)
                 .show()
+        }*/
+
+        if(game.blueGrid.isFinished || game.redGrid.isFinished){
+            val msg: String = if(game.blueGrid.isFinished){
+                "Red"
+            }
+            else{
+                "Blue"
+            }
+            Snackbar
+                .make(this@GameView, "$msg Player Wins!", Snackbar.LENGTH_SHORT)
+                .show()
+
         }
 
 
+    }//End of onDraw
+
+    //This is currently broken redraws the grids but gesturedetecter no longer functions properly. Maybe dont wanna use this and instead go bac to home screen.
+    private fun restartGame() {
+        //TimeUnit.SECONDS.sleep(1L)
+        game = MyBattleShipGame(10, 10)
+        invalidate()
+    }
+
+    private val gridChangeListener = BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
+
+    init{
+        game.blueGrid.addOnGridChangeListener(gridChangeListener)
+        game.redGrid.addOnGridChangeListener(gridChangeListener)
+    }
+
+    private val gestureDetector = GestureDetectorCompat(context, object:
+    GestureDetector.SimpleOnGestureListener(){
+        override fun onDown(e: MotionEvent):Boolean{
+            return true
+        }
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            val cellWidth = width.toFloat()/colCount
+            val cellHeight = (height.toFloat()/2)/rowCount
+            val cell = minOf(cellWidth, cellHeight)
+            val x = e.x.toInt()
+            val y = e.y.toInt()
+            val column = x/cell
+            val row = (y - (height.toFloat()/2)+20f) / cell
+            return if(y < (height.toFloat()/2)+20f){
+                false
+            } else{
+                game.playerGame(column.toInt(), row.toInt())
+                true
+            }
+        }
+    })
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
     /*Currently unsure how to switch between players. This function is for debug purposes will be removed later.
