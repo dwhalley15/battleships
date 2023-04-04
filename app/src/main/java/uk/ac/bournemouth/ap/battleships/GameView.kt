@@ -25,7 +25,11 @@ class GameView: View {
         defStyleAttr
     )
 
+    var msg: String = ""
+
     var game = MyBattleShipGame(10,10)
+
+    private var listener: MyBattleShipGame.OnGameFinishedListener? = null
 
     private val colCount:Int get() = game.columns
     private val rowCount:Int get() = game.rows
@@ -380,27 +384,21 @@ class GameView: View {
         }*/
 
         if(game.blueGrid.isFinished || game.redGrid.isFinished){
-            val msg: String = if(game.blueGrid.isFinished){
+            msg = if(game.blueGrid.isFinished){
                 "Red"
             }
-            else{
+            else if(game.redGrid.isFinished){
                 "Blue"
             }
-            Snackbar
-                .make(this@GameView, "$msg Player Wins!", Snackbar.LENGTH_SHORT)
-                .show()
-
+            else{
+                ""
+            }
+            gameOver()
         }
 
 
     }//End of onDraw
 
-    //This is currently broken redraws the grids but gesturedetecter no longer functions properly. Maybe dont wanna use this and instead go bac to home screen.
-    private fun restartGame() {
-        //TimeUnit.SECONDS.sleep(1L)
-        game = MyBattleShipGame(10, 10)
-        invalidate()
-    }
 
     private val gridChangeListener = BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
 
@@ -421,7 +419,7 @@ class GameView: View {
             val x = e.x.toInt()
             val y = e.y.toInt()
             val column = x/cell
-            val row = (y - (height.toFloat()/2)+20f) / cell
+            val row = (y - (height.toFloat()/2)-40f) / cell
             return if(y < (height.toFloat()/2)+20f){
                 false
             } else{
@@ -434,6 +432,15 @@ class GameView: View {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
     }
+
+    fun setOnGameFinishedListener(listener: MyBattleShipGame.OnGameFinishedListener) {
+        this.listener = listener
+    }
+
+    private fun gameOver(){
+        listener?.onGameFinished()
+    }
+
 
     /*Currently unsure how to switch between players. This function is for debug purposes will be removed later.
     fun playGame():Unit{

@@ -60,6 +60,10 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
         }
     }
 
+    interface OnGameFinishedListener {
+        fun onGameFinished()
+    }
+
     /*THIS IS OLD AND CAN BE DELETED LATER.
     fun playTurn(): Array<IntArray> {
         return if(turn == 1){
