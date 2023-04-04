@@ -11,27 +11,7 @@ class MyOpponent(
     random: Random
 ) : BattleshipOpponent {
 
-    /*val shipTypes = intArrayOf(
-        5, // Carrier
-        4, // Battleship"
-        3, // Cruiser"
-        3, // Submarine"
-        2 // Destroyer
-    )*/
-
     override val ships = randomShipPlacement(columns, rows, shipTypes, random)
-
-    /*OLD TO BE DELETED
-    fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
-        val grid = Array(columns) { IntArray(rows) { 0 } }
-        for(ship in ships) {
-            for (column in ship.top until ship.bottom+1) {
-                for (row in ship.left until ship.right+1)
-                    grid[column][row] = ship.size
-            }
-        }
-        return grid
-    }*/
 
     //A random place ship function that brings in type random and returns List of type MyShip
     private fun randomShipPlacement(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<MyShip>{
@@ -96,6 +76,26 @@ class MyOpponent(
             null
         }
     }
+
+    /*val shipTypes = intArrayOf(
+        5, // Carrier
+        4, // Battleship"
+        3, // Cruiser"
+        3, // Submarine"
+        2 // Destroyer
+    )*/
+
+    /*OLD TO BE DELETED
+    fun placeShipsOnGrid(ships: List<Ship> ): Array<IntArray>{
+        val grid = Array(columns) { IntArray(rows) { 0 } }
+        for(ship in ships) {
+            for (column in ship.top until ship.bottom+1) {
+                for (row in ship.left until ship.right+1)
+                    grid[column][row] = ship.size
+            }
+        }
+        return grid
+    }*/
 
     /*THIS IS AN OLD VERSION THAT MAY BE DELETED LATER
     private fun placeShipsRandom(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<Ship> {
