@@ -6,7 +6,7 @@ import kotlin.random.Random
 
 class MyBattleShipGame(val columns: Int, val rows: Int){
 
-    val shipTypes = intArrayOf(
+    private val shipTypes = intArrayOf(
         5, // Carrier
         4, // Battleship"
         3, // Cruiser"
@@ -39,7 +39,7 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
     }
 
     //Plays a computer turn
-    fun playTurn(columns: Int, rows: Int, grid: MyGrid){
+    private fun playTurn(columns: Int, rows: Int, grid: MyGrid){
         var guessCell: Coordinate
         do {
             guessCell = grid.randomGuess(columns, rows, Random)

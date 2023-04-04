@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SinglePlayerActivity::class.java)
         startActivity(intent)
     }
-    fun startCompPlay(view: View) {}
+    fun startCompPlay(view: View) {
+        val intent = Intent(this, ComputerVsActivity::class.java)
+        startActivity(intent)
+    }
 
 }
