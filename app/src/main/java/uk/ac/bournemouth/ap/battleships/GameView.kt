@@ -200,11 +200,11 @@ class GameView: View {
             canvas.drawLine(0f, (gridHeight+20f)+y * cellHeight, canvasWidth, (gridHeight+20f)+y * cellHeight, linePaint)
         }
 
-        //Draw top cell tokens
+        //Draw bottom cell tokens
         for(x in 1..colCount) {
             for (y in 1..rowCount) {
 
-                if (game.redPlayer.shipAt(x - 1, y - 1) != null) {
+                /*if (game.redPlayer.shipAt(x - 1, y - 1) != null) {
                     canvas.drawRect(
                         (x-1) * cellWidth,
                         gridHeight+20f+(y-1) * cellHeight,
@@ -218,7 +218,7 @@ class GameView: View {
                         (gridHeight+20f)+y * cellHeight - cellHeight / 2 + textOffset,
                         wordPaint
                     )
-                }
+                }*/
 
                 if (game.blueGrid.data[x - 1, y - 1] == GuessCell.MISS) {
                     canvas.drawCircle(

@@ -42,7 +42,11 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
     private fun playTurn(columns: Int, rows: Int, grid: MyGrid){
         var guessCell: Coordinate
         do {
-            guessCell = grid.randomGuess(columns, rows, Random)
+            guessCell = if(grid.opponent.tactics.isNotEmpty()){
+                grid.tacticalGuess(grid.opponent.tactics, Random)
+            } else {
+                grid.randomGuess(columns, rows, Random)
+            }
         }
             while(!grid.isGuessValid(guessCell))
         grid.shootAt(guessCell.x, guessCell.y)

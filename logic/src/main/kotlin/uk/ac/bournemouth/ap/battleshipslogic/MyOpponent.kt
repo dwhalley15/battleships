@@ -1,17 +1,19 @@
 package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
+import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
 
 class MyOpponent(
     override val columns: Int,
     override val rows: Int,
-    //override val ships: List<MyShip>
     val shipTypes: IntArray,
-    random: Random
+    random: Random.Default
 ) : BattleshipOpponent {
 
     override val ships = randomShipPlacement(columns, rows, shipTypes, random)
+
+    val tactics = mutableListOf<Coordinate>()
 
     //A random place ship function that brings in type random and returns List of type MyShip
     private fun randomShipPlacement(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<MyShip>{

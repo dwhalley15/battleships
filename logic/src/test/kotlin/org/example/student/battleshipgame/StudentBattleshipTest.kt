@@ -4,6 +4,7 @@ import uk.ac.bournemouth.ap.battleshiplib.*
 import uk.ac.bournemouth.ap.battleshiplib.test.BattleshipTest
 import uk.ac.bournemouth.ap.battleshipslogic.MyGrid
 import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
+import uk.ac.bournemouth.ap.battleshipslogic.MyOpponentSecond
 import uk.ac.bournemouth.ap.battleshipslogic.MyShip
 import uk.ac.bournemouth.ap.lib.matrix.boolean.BooleanMatrix
 import kotlin.random.Random
@@ -13,8 +14,8 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
         columns: Int,
         rows: Int,
         ships: List<MyShip>
-    ): MyOpponent {
-        return TODO()//MyOpponent(columns, rows)
+    ): MyOpponentSecond {
+        return MyOpponentSecond(columns, rows, ships)
     }
 
     override fun transformShip(sourceShip: Ship): MyShip {
@@ -40,7 +41,7 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
             opponent as? MyOpponent
                 ?: createOpponent(opponent.columns, opponent.rows, opponent.ships.map { it as? MyShip ?: transformShip(it) })
 
-        return MyGrid(columns = 10, rows = 10, studentOpponent)
+        return MyGrid(columns = 10, rows = 10, studentOpponent as MyOpponent)
     }
 }
 

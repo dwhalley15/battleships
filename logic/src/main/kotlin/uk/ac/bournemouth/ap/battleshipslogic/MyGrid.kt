@@ -25,16 +25,26 @@ class MyGrid(
     }
 
     override fun shootAt(column: Int, row: Int): GuessResult {
+        opponent.tactics.remove(Coordinate(column, row))
         return if(opponent.shipAt(column, row) != null){
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index
+            val potentialTactics = mutableListOf(Coordinate(column+1, row), Coordinate(column, row+1), Coordinate(column-1, row), Coordinate(column, row-1))
+            val newTactics = mutableListOf<Coordinate>()
+            for (tactic in potentialTactics){
+                if(isOnGrid(tactic) && isGuessValid(tactic)){
+                    newTactics.add(tactic)
+                }
+            }
             data[column, row] = GuessCell.HIT(index)
+            opponent.tactics.addAll(newTactics)
             if(checkIfSunk(ship)){
                 for(col in ship.left..ship.right){
                     for(r in ship.top..ship.bottom){
                         data[col, r] = GuessCell.SUNK(index)
                     }
                 }
+                //opponent.tactics.clear()
                 shipsSunk[index] = true
                 GuessResult.SUNK(index)
             }
@@ -50,6 +60,17 @@ class MyGrid(
         val guessColumn = random.nextInt(0, columns)
         val guessRow = random.nextInt(0, rows)
         return Coordinate(guessColumn, guessRow)
+    }
+
+    //Guess a cell randomly that exists inside the tactics list.
+    fun tacticalGuess(tactics: MutableList<Coordinate>, random: Random): Coordinate {
+        val randomIndex = random.nextInt(tactics.size)
+        return tactics[randomIndex]
+    }
+
+    //Check that a selected cell is on the grid.
+    private fun isOnGrid(guessCell:Coordinate): Boolean{
+        return (guessCell.x < columns && guessCell.y < rows) && (guessCell.x > 0 && guessCell.y > 0)
     }
 
     //Check that a selected cell has not been shot at before.

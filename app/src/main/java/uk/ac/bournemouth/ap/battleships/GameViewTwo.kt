@@ -196,7 +196,7 @@ class GameViewTwo: View {
             canvas.drawLine(0f, (gridHeight+20f)+y * cellHeight, canvasWidth, (gridHeight+20f)+y * cellHeight, linePaint)
         }
 
-        //Draw top cell tokens
+        //Draw bottom cell tokens
         for(x in 1..colCount) {
             for (y in 1..rowCount) {
 
@@ -267,13 +267,16 @@ class GameViewTwo: View {
             invalidate()
         }
         else{
-            msg = if(game.turn == 1){
-                "Blue"
-            } else if(game.turn == 2){
-                "Red"
-            }
-            else{
-                ""
+            msg = when (game.turn) {
+                1 -> {
+                    "Blue"
+                }
+                2 -> {
+                    "Red"
+                }
+                else -> {
+                    ""
+                }
             }
             gameOver()
         }
