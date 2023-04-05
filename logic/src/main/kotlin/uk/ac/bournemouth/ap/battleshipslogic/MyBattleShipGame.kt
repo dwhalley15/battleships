@@ -48,7 +48,7 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
                 grid.randomGuess(columns, rows, Random)
             }
         }
-            while(!grid.isGuessValid(guessCell))
+        while(!grid.isGuessValid(guessCell))
         grid.shootAt(guessCell.x, guessCell.y)
         turn = (turn % 2)+1
     }
