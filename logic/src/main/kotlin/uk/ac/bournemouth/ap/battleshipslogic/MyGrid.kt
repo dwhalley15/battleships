@@ -27,11 +27,11 @@ class MyGrid(
     override fun shootAt(column: Int, row: Int): GuessResult {
         opponent.tactics.remove(Coordinate(column, row))
         return if(opponent.shipAt(column, row) != null){
-            onHit(Coordinate(column, row))
+            //onHit(Coordinate(column, row))
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index
             data[column, row] = GuessCell.HIT(index)
-            generateTactics(column, row)
+            //generateTactics(column, row)
             if(checkIfSunk(ship)){
                 for(col in ship.left..ship.right){
                     for(r in ship.top..ship.bottom){
@@ -128,6 +128,38 @@ class MyGrid(
             opponent.firstHit.add(opponent.secondHit[0])
             opponent.secondHit.clear()
         }
+    }
+
+    fun isAnyHits(){
+        opponent.hits.clear()
+        opponent.tactics.clear()
+        for(col in 0 until columns){
+            for(row in 0 until rows) {
+                if (data[col, row] == GuessCell.HIT(0) || data[col, row] == GuessCell.HIT(1) || data[col, row] == GuessCell.HIT(2) || data[col, row] == GuessCell.HIT(3) || data[col, row] == GuessCell.HIT(4)) {
+                    val hit = Coordinate(col, row)
+                    opponent.hits.add(hit)
+                }
+            }
+        }
+        if(opponent.hits.isNotEmpty()){
+            huntTactics()
+        }
+    }
+
+    fun huntTactics(){
+        do{
+            val index = Random.nextInt(opponent.hits.size)
+            val potentialTactics = mutableListOf(Coordinate(opponent.hits[index].x+1, opponent.hits[index].y), Coordinate(opponent.hits[index].x-1,opponent.hits[index].y), Coordinate( opponent.hits[index].x, opponent.hits[index].y+1), Coordinate(opponent.hits[index].x, opponent.hits[index].y-1))
+            val newTactics = mutableListOf<Coordinate>()
+            for (tactic in potentialTactics){
+                if(isOnGrid(tactic) && isGuessValid(tactic)){
+                    newTactics.add(tactic)
+                }
+            }
+            opponent.tactics.clear()
+            opponent.tactics.addAll(newTactics)
+        }
+            while(opponent.tactics.isEmpty())
     }
 
     override fun addOnGridChangeListener(listener: BattleshipGrid.BattleshipGridListener) {

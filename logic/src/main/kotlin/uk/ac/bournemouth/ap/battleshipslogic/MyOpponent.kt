@@ -15,6 +15,8 @@ class MyOpponent(
 
     val tactics = mutableListOf<Coordinate>()
 
+    var hits = mutableListOf<Coordinate>()
+
     var firstHit = mutableListOf<Coordinate>()
 
     var secondHit = mutableListOf<Coordinate>()

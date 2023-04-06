@@ -21,7 +21,6 @@ class MySecondGrid(
     }
 
     override fun shootAt(column: Int, row: Int): GuessResult {
-        require(isOnGrid(Coordinate(column, row)))
         if (opponent.shipAt(column, row) != null) {
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index

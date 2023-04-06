@@ -41,6 +41,8 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
     //Plays a computer turn
     private fun playTurn(columns: Int, rows: Int, grid: MyGrid){
         var guessCell: Coordinate
+        grid.opponent.tactics.clear()
+        grid.isAnyHits()
         do {
             guessCell = if(grid.opponent.tactics.isNotEmpty()){
                 grid.tacticalGuess(grid.opponent.tactics, Random)
