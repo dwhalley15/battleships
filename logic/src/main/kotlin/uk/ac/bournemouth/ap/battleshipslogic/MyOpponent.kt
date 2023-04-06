@@ -8,12 +8,16 @@ class MyOpponent(
     override val columns: Int,
     override val rows: Int,
     val shipTypes: IntArray,
-    random: Random.Default
+    random: Random
 ) : BattleshipOpponent {
 
     override val ships = randomShipPlacement(columns, rows, shipTypes, random)
 
     val tactics = mutableListOf<Coordinate>()
+
+    var firstHit = mutableListOf<Coordinate>()
+
+    var secondHit = mutableListOf<Coordinate>()
 
     //A random place ship function that brings in type random and returns List of type MyShip
     private fun randomShipPlacement(columns: Int, rows: Int, shipTypes: IntArray, random: Random): List<MyShip>{

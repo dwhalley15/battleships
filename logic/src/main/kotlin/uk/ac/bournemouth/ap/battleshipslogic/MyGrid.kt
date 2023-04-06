@@ -27,18 +27,11 @@ class MyGrid(
     override fun shootAt(column: Int, row: Int): GuessResult {
         opponent.tactics.remove(Coordinate(column, row))
         return if(opponent.shipAt(column, row) != null){
+            onHit(Coordinate(column, row))
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index
             data[column, row] = GuessCell.HIT(index)
-            val potentialTactics = mutableListOf(Coordinate((column+1), row), Coordinate(column, (row+1)), Coordinate((column-1), row), Coordinate(column, (row-1)))
-            val newTactics = mutableListOf<Coordinate>()
-            for (tactic in potentialTactics){
-                if(isOnGrid(tactic) && isGuessValid(tactic)){
-                    newTactics.add(tactic)
-                }
-            }
-            opponent.tactics.clear()
-            opponent.tactics.addAll(newTactics)
+            generateTactics(column, row)
             if(checkIfSunk(ship)){
                 for(col in ship.left..ship.right){
                     for(r in ship.top..ship.bottom){
@@ -46,6 +39,8 @@ class MyGrid(
                     }
                 }
                 opponent.tactics.clear()
+                opponent.firstHit.clear()
+                opponent.secondHit.clear()
                 shipsSunk[index] = true
                 GuessResult.SUNK(index)
             }
@@ -85,6 +80,56 @@ class MyGrid(
         return ship.isSunk
     }
 
+    //Adds the guess to either the firstHit or secondHit
+    private fun onHit(guessCell: Coordinate){
+        if(opponent.firstHit.isEmpty()){
+            opponent.firstHit.add(guessCell)
+        }
+        else if(opponent.secondHit.isEmpty()){
+            opponent.secondHit.add(guessCell)
+        }
+    }
+
+    //Generates tactics based on what is stored in firstHit and secondHit
+    private fun generateTactics(column: Int, row: Int){
+        var direction = ""
+        if(opponent.firstHit.isNotEmpty() && opponent.secondHit.isEmpty()){
+            val potentialTactics = mutableListOf(Coordinate((column+1), row), Coordinate(column, (row+1)), Coordinate((column-1), row), Coordinate(column, (row-1)))
+            val newTactics = mutableListOf<Coordinate>()
+            for (tactic in potentialTactics){
+                if(isOnGrid(tactic) && isGuessValid(tactic)){
+                    newTactics.add(tactic)
+                }
+            }
+            opponent.tactics.clear()
+            opponent.tactics.addAll(newTactics)
+        }
+        else if(opponent.secondHit.isNotEmpty()){
+            if(opponent.secondHit[0].x == opponent.firstHit[0].x+1 || opponent.secondHit[0].x == opponent.firstHit[0].x-1 || opponent.secondHit[0].x == opponent.firstHit[0].x-2 || opponent.secondHit[0].x == opponent.firstHit[0].x+2){
+                direction = "horizontal"
+            }
+            else if(opponent.secondHit[0].y == opponent.firstHit[0].y+1 || opponent.secondHit[0].y == opponent.firstHit[0].y-1 || opponent.secondHit[0].y == opponent.firstHit[0].y-2 || opponent.secondHit[0].y == opponent.firstHit[0].y+2){
+                direction = "vertical"
+            }
+            val potentialTactics: MutableList<Coordinate> = if(direction == "horizontal"){
+                mutableListOf(Coordinate(opponent.secondHit[0].x+2, opponent.secondHit[0].y), Coordinate(opponent.secondHit[0].x-2, opponent.secondHit[0].y), Coordinate(opponent.secondHit[0].x+1, opponent.secondHit[0].y), Coordinate(opponent.secondHit[0].x-1, opponent.secondHit[0].y))
+            } else{
+                mutableListOf(Coordinate(opponent.secondHit[0].x, opponent.secondHit[0].y+2), Coordinate(opponent.secondHit[0].x, opponent.secondHit[0].y-2), Coordinate(opponent.secondHit[0].x, opponent.secondHit[0].y+1), Coordinate(opponent.secondHit[0].x, opponent.secondHit[0].y-1))
+            }
+            val newTactics = mutableListOf<Coordinate>()
+            for (tactic in potentialTactics){
+                if(isOnGrid(tactic) && isGuessValid(tactic)){
+                    newTactics.add(tactic)
+                }
+            }
+            opponent.tactics.clear()
+            opponent.tactics.addAll(newTactics)
+            opponent.firstHit.clear()
+            opponent.firstHit.add(opponent.secondHit[0])
+            opponent.secondHit.clear()
+        }
+    }
+
     override fun addOnGridChangeListener(listener: BattleshipGrid.BattleshipGridListener) {
         if(listener !in gridChangeListeners){
             gridChangeListeners.add(listener)
@@ -100,4 +145,37 @@ class MyGrid(
             listener.onGridChanged(this, column, row)
         }
     }
+
+    /* THIS IS OLD AND MAY BE DELETED LATER.
+    override fun shootAt(column: Int, row: Int): GuessResult {
+        opponent.tactics.remove(Coordinate(column, row))
+        return if(opponent.shipAt(column, row) != null){
+            val ship = opponent.shipAt(column, row)!!.ship
+            val index = opponent.shipAt(column, row)!!.index
+            data[column, row] = GuessCell.HIT(index)
+            val potentialTactics = mutableListOf(Coordinate((column+1), row), Coordinate(column, (row+1)), Coordinate((column-1), row), Coordinate(column, (row-1)))
+            val newTactics = mutableListOf<Coordinate>()
+            for (tactic in potentialTactics){
+                if(isOnGrid(tactic) && isGuessValid(tactic)){
+                    newTactics.add(tactic)
+                }
+            }
+            opponent.tactics.clear()
+            opponent.tactics.addAll(newTactics)
+            if(checkIfSunk(ship)){
+                for(col in ship.left..ship.right){
+                    for(r in ship.top..ship.bottom){
+                        data[col, r] = GuessCell.SUNK(index)
+                    }
+                }
+                opponent.tactics.clear()
+                shipsSunk[index] = true
+                GuessResult.SUNK(index)
+            }
+            GuessResult.HIT(index)
+        } else{
+            data[column, row] = GuessCell.MISS
+            GuessResult.MISS
+        }
+    }*/
 }

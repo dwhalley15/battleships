@@ -2,7 +2,7 @@ package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 
-class MyOpponentSecond(
+class MySecondOpponent(
     override val columns: Int,
     override val rows: Int,
     override val ships: List<MyShip>

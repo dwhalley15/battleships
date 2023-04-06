@@ -2,10 +2,7 @@ package org.example.student.battleshipgame
 
 import uk.ac.bournemouth.ap.battleshiplib.*
 import uk.ac.bournemouth.ap.battleshiplib.test.BattleshipTest
-import uk.ac.bournemouth.ap.battleshipslogic.MyGrid
-import uk.ac.bournemouth.ap.battleshipslogic.MyOpponent
-import uk.ac.bournemouth.ap.battleshipslogic.MyOpponentSecond
-import uk.ac.bournemouth.ap.battleshipslogic.MyShip
+import uk.ac.bournemouth.ap.battleshipslogic.*
 import uk.ac.bournemouth.ap.lib.matrix.boolean.BooleanMatrix
 import kotlin.random.Random
 
@@ -14,8 +11,8 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
         columns: Int,
         rows: Int,
         ships: List<MyShip>
-    ): MyOpponentSecond {
-        return MyOpponentSecond(columns, rows, ships)
+    ): MySecondOpponent {
+        return MySecondOpponent(columns, rows, ships)
     }
 
     override fun transformShip(sourceShip: Ship): MyShip {
@@ -35,13 +32,13 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
     override fun createGrid(
         grid: BooleanMatrix,
         opponent: BattleshipOpponent
-    ): MyGrid {
+    ): MySecondGrid {
         // If the opponent is not a StudentBattleshipOpponent, create it based upon the passed in data
         val studentOpponent =
-            opponent as? MyOpponent
+            opponent as? MySecondOpponent
                 ?: createOpponent(opponent.columns, opponent.rows, opponent.ships.map { it as? MyShip ?: transformShip(it) })
 
-        return MyGrid(columns = 10, rows = 10, studentOpponent as MyOpponent)
+        return MySecondGrid(columns = 10, rows = 10, studentOpponent)
     }
 }
 
