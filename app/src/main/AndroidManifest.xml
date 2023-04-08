@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".PlayerVsPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ComputerVsActivity"
             android:exported="false" />
         <activity

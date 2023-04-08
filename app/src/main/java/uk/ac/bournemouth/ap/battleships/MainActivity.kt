@@ -37,4 +37,14 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    /**
+     * The function that starts a player vs player game.
+     *
+     * @param view Used to create the UI.
+     */
+    fun startTwoPlayer(view: View) {
+        val intent = Intent(this, PlayerVsPlayerActivity::class.java)
+        startActivity(intent)
+    }
+
 }

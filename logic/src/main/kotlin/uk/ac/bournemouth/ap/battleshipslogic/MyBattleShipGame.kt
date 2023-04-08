@@ -64,7 +64,7 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
     }
 
     /**
-     * Represents the computer playnig a turn.
+     * Represents the computer playing a turn.
      *
      * @param columns The maximum amount of grid columns.
      * @param rows The maximum amount of grid rows.
@@ -96,6 +96,24 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
         }
         else{
             playTurn(columns, rows, redGrid)
+        }
+    }
+
+    /**
+     * Main function for a two player game.
+     * Represents a human player taking a turn then passing to the next player.
+     *
+     * @param column of a human guessed cell.
+     * @param row of a human guessed cell.
+     * @param grid the grid the active player is shooting at.
+     */
+    fun twoPlayerGame(column: Int, row: Int, grid: MyGrid){
+        if(column < columns && row < rows){
+            if(grid.isGuessValid(Coordinate(column, row))) {
+                grid.shootAt(column, row)
+                grid.onGridChanged(column, row)
+                turn = (turn % 2)+1
+            }
         }
     }
 
