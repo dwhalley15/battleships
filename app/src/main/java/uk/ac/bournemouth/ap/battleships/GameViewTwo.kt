@@ -8,8 +8,11 @@ import android.view.View
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
 import java.util.concurrent.TimeUnit
-
-
+/**
+ *A class that draws he UI for the computer vs computer game mode.
+ *
+ * @author David Whalley
+ */
 class GameViewTwo: View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -19,81 +22,93 @@ class GameViewTwo: View {
         defStyleAttr
     )
 
-    var msg: String = ""
-
+    /**
+     * Holds the created game of type MyBattleShipGame.
+     */
     private var game = MyBattleShipGame(10,10)
 
+    /**
+     * Holds the eventual winner of the game.
+     */
+    var msg: String = ""
+
+    /**
+     * Hold the listener for when the game has finished.
+     */
     private var listener: MyBattleShipGame.OnGameFinishedListener? = null
 
+    /**
+     * Holds the maximum columns and rows used to draw the grid.
+     */
     private val colCount:Int get() = game.columns
     private val rowCount:Int get() = game.rows
 
+    /**
+     * Initilise all paints used for UI.
+     */
     private val backPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.rgb(0,157,196)
     }
-
     private val linePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
     }
-
     private val wordPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         textSize = 20f * resources.displayMetrics.density
         typeface = Typeface.SANS_SERIF
         color = Color.BLACK
     }
-
     private val redCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.STROKE
         strokeWidth = 10f
         isAntiAlias = true
         color = Color.RED
     }
-
     private val blueCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.STROKE
         strokeWidth = 10f
         isAntiAlias = true
         color = Color.BLUE
     }
-
     private val redXPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         textSize = 20f * resources.displayMetrics.density
         typeface = Typeface.SANS_SERIF
         color = Color.RED
     }
-
     private val blueXPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         textSize = 20f * resources.displayMetrics.density
         typeface = Typeface.SANS_SERIF
         color = Color.BLUE
     }
-
     private val redSunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.RED
     }
-
     private val blueSunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLUE
     }
-
     private val shipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.GRAY
     }
 
+    /**
+     * Offsets the text to keep it central.
+     */
     private val textOffset = run {
         val textBounds = Rect()
         wordPaint.getTextBounds("X", 0, 1, textBounds)
         (textBounds.top + textBounds.bottom) / -2f
     }
 
+    /**
+     * The main function that draws the UI.
+     */
     override fun onDraw(canvas: Canvas) {
 
         //Measure size of the canvas
@@ -260,7 +275,8 @@ class GameViewTwo: View {
             }
         }
 
-        //For the computer vs computer mode this is what triggers and ends the game.
+        //Triggers the computer vs computer game to play.
+        //Also sets msg as the winner and triggers gameOver() when the game is finished.
         if(!game.blueGrid.isFinished && !game.redGrid.isFinished){
             game.playGame()
             TimeUnit.SECONDS.sleep(1L)
@@ -282,9 +298,18 @@ class GameViewTwo: View {
         }
     }//End of onDraw
 
+    /**
+     * The function sets the on game finished listener.
+     *
+     * @param listener Of type OnGameFinishedListener
+     */
     fun setOnGameFinishedListener(listener: MyBattleShipGame.OnGameFinishedListener) {
         this.listener = listener
     }
+
+    /**
+     * The function that triggers the on game finished listener when the game is over.
+     */
     private fun gameOver(){
         listener?.onGameFinished()
     }

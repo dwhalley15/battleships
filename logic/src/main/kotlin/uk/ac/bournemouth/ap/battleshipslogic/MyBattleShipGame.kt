@@ -2,10 +2,20 @@ package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
-
-
+/**
+ *A class that represents the Battleship game as a whole.
+ *
+ * @author David Whalley
+ *
+ * @param columns The maximum amount of grid columns.
+ * @param rows The maximum amount of grid rows.
+ */
 class MyBattleShipGame(val columns: Int, val rows: Int){
 
+    /**
+     * A list of default ship types.
+     * Each ship represented by an integer depicting the length.
+    */
     private val shipTypes = intArrayOf(
         5, // Carrier
         4, // Battleship"
@@ -14,18 +24,33 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
         2 // Destroyer
     )
 
+    /**
+     * Constructs two players of type MyOpponent.
+     */
     val redPlayer = MyOpponent(columns, rows, shipTypes, Random)
 
     val bluePlayer = MyOpponent(columns, rows, shipTypes, Random)
 
+    /**
+     * Constructs two player grids of type MyGrid each with a different opponent.
+     */
     var redGrid = MyGrid(columns, rows, bluePlayer)
 
     var blueGrid = MyGrid(columns, rows, redPlayer)
 
+    /**
+     * Selects a random integer 1 or 2.
+     * Used to randomly decide which players turn is first.
+     */
     var turn:Int = Random.nextInt(2)+1
 
-
-    //This plays a one player game with redplayer being the human player, blueplayer being the computer.
+    /**
+     * Main function for a single player game.
+     * Represents the human player taking a turn followed by the computer player taking a turn.
+     *
+     * @param column of a human guessed cell.
+     * @param row of a human guessed cell.
+     */
     fun playerGame(column: Int, row: Int){
         if(column < columns && row < rows){
             if(blueGrid.isGuessValid(Coordinate(column, row))) {
@@ -38,7 +63,13 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
 
     }
 
-    //Plays a computer turn
+    /**
+     * Represents the computer playnig a turn.
+     *
+     * @param columns The maximum amount of grid columns.
+     * @param rows The maximum amount of grid rows.
+     * @param grid The opponents grid the current player is shooting at.
+     */
     private fun playTurn(columns: Int, rows: Int, grid: MyGrid){
         var guessCell: Coordinate
         grid.opponent.tactics.clear()
@@ -55,8 +86,10 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
         turn = (turn % 2)+1
     }
 
-
-    //This plays a game mode computer vs computer
+    /**
+     * Main function for a computer vs computer player game.
+     * Represents two computer players taking turns.
+     */
     fun playGame(){
         if(turn == 1){
             playTurn(columns, rows, blueGrid)
@@ -66,23 +99,15 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
         }
     }
 
+    /**
+     * An interface for when a game has finished.
+     *
+     * @author David Whalley
+     */
     interface OnGameFinishedListener {
+        /**
+         * When a game has finished this method is called.
+         */
         fun onGameFinished()
     }
-
-    /*THIS IS OLD AND CAN BE DELETED LATER.
-    fun playTurn(): Array<IntArray> {
-        return if(turn == 1){
-            redPlayerGrid = redPlayer.redTurn(columns, rows, redPlayerGrid, redPlayer.ships)
-            turn = 2
-            redPlayerGrid
-        } else{
-            bluePlayerGrid = bluePlayer.blueTurn(columns, rows, bluePlayerGrid, bluePlayer.ships)
-            turn = 1
-            bluePlayerGrid
-        }
-    }*/
-
-
-
 }

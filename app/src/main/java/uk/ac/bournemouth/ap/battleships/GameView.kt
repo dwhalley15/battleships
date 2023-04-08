@@ -1,6 +1,5 @@
 package uk.ac.bournemouth.ap.battleships
 
-
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -11,9 +10,11 @@ import androidx.core.view.GestureDetectorCompat
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
-
-
-
+/**
+ *A class that draws he UI for the single player game mode.
+ *
+ * @author David Whalley
+ */
 class GameView: View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -23,81 +24,93 @@ class GameView: View {
         defStyleAttr
     )
 
-    var msg: String = ""
-
+    /**
+     * Holds the created game of type MyBattleShipGame.
+     */
     var game = MyBattleShipGame(10,10)
 
+    /**
+     * Holds the eventual winner of the game.
+     */
+    var msg: String = ""
+
+    /**
+     * Hold the listener for when the game has finished.
+     */
     private var listener: MyBattleShipGame.OnGameFinishedListener? = null
 
+    /**
+     * Holds the maximum columns and rows used to draw the grid.
+     */
     private val colCount:Int get() = game.columns
     private val rowCount:Int get() = game.rows
 
+    /**
+     * Initilise all paints used for UI.
+     */
     private val backPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.rgb(0,157,196)
     }
-
     private val linePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
     }
-
     private val wordPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         textSize = 20f * resources.displayMetrics.density
         typeface = Typeface.SANS_SERIF
         color = Color.BLACK
     }
-
     private val redCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.STROKE
         strokeWidth = 10f
         isAntiAlias = true
         color = Color.RED
     }
-
     private val blueCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.STROKE
         strokeWidth = 10f
         isAntiAlias = true
         color = Color.BLUE
     }
-
     private val redXPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         textSize = 20f * resources.displayMetrics.density
         typeface = Typeface.SANS_SERIF
         color = Color.RED
     }
-
     private val blueXPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         textSize = 20f * resources.displayMetrics.density
         typeface = Typeface.SANS_SERIF
         color = Color.BLUE
     }
-
     private val redSunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.RED
     }
-
     private val blueSunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLUE
     }
-
     private val shipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.GRAY
     }
 
+    /**
+     * Offsets the text to keep it central.
+     */
     private val textOffset = run {
         val textBounds = Rect()
         wordPaint.getTextBounds("X", 0, 1, textBounds)
         (textBounds.top + textBounds.bottom) / -2f
     }
 
+    /**
+     * The main function that draws the UI.
+     */
     override fun onDraw(canvas: Canvas) {
 
         //Measure size of the canvas
@@ -204,7 +217,8 @@ class GameView: View {
         for(x in 1..colCount) {
             for (y in 1..rowCount) {
 
-                /*if (game.redPlayer.shipAt(x - 1, y - 1) != null) {
+                /*This shows the red players ships on the grid. Uncomment for debug purposes.
+                if (game.redPlayer.shipAt(x - 1, y - 1) != null) {
                     canvas.drawRect(
                         (x-1) * cellWidth,
                         gridHeight+20f+(y-1) * cellHeight,
@@ -264,6 +278,7 @@ class GameView: View {
             }
         }
 
+        //Sets msg to the winner and triggers a game over when the game is finsihed.
         if(game.blueGrid.isFinished || game.redGrid.isFinished){
             msg = if(game.blueGrid.isFinished){
                 "Red"
@@ -278,14 +293,22 @@ class GameView: View {
         }
     }//End of onDraw
 
+    /**
+     * Holds the listeners for grid changes.
+     */
+    private val gridChangeListener = BattleshipGrid.BattleshipGridListener { _, _, _ -> invalidate() }
 
-    private val gridChangeListener = BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
-
+    /**
+     * Adds the listeners for grid changes to both player grids.
+     */
     init{
         game.blueGrid.addOnGridChangeListener(gridChangeListener)
         game.redGrid.addOnGridChangeListener(gridChangeListener)
     }
 
+    /**
+     * Holds the details for touch screen events.
+     */
     private val gestureDetector = GestureDetectorCompat(context, object:
     GestureDetector.SimpleOnGestureListener(){
         override fun onDown(e: MotionEvent):Boolean{
@@ -308,14 +331,29 @@ class GameView: View {
         }
     })
 
+    /**
+     * The function that triggers an on touch event.
+     *
+     * @param event The touch event triggered.
+     *
+     *@return True or false depending on if the result of the touch event.
+     */
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
+    /**
+     * The function sets the on game finished listener.
+     *
+     * @param listener Of type OnGameFinishedListener
+     */
     fun setOnGameFinishedListener(listener: MyBattleShipGame.OnGameFinishedListener) {
         this.listener = listener
     }
 
+    /**
+     * The function that triggers the on game finished listener when the game is over.
+     */
     private fun gameOver(){
         listener?.onGameFinished()
     }
