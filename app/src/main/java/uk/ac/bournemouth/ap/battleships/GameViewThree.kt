@@ -10,6 +10,8 @@ import androidx.core.view.GestureDetectorCompat
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
+import kotlin.math.sqrt
+
 /**
  *A class that draws he UI for the two player game mode.
  *
@@ -117,10 +119,11 @@ class GameViewThree: View {
         val canvasWidth = width.toFloat()
         val canvasHeight = height.toFloat()
 
-        //Measure size for each grid. Maybe do something here with width and height which is greater?
-        val gridWidth = (canvasWidth/2)
+        //Measure height for each grid.
         val gridHeight = (canvasHeight/2)
 
+        //Work out the desired margin between grids.
+        val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
 
         //Set the cell size
         val cellWidth = minOf(canvasWidth / colCount)
@@ -202,16 +205,16 @@ class GameViewThree: View {
         }
 
         //Draw background for bottom grid.
-        canvas.drawRect(0f,gridHeight+20f, canvasWidth, canvasHeight, backPaint)
+        canvas.drawRect(0f,gridHeight+margin, canvasWidth, canvasHeight, backPaint)
 
         //Draw bottom grid column lines
         for(x in 0..colCount){
-            canvas.drawLine(x * cellWidth, gridHeight+20f, x * cellWidth, canvasHeight, linePaint)
+            canvas.drawLine(x * cellWidth, gridHeight+margin, x * cellWidth, canvasHeight, linePaint)
         }
 
         //Draw bottom grid row lines
         for(y in 0..rowCount){
-            canvas.drawLine(0f, (gridHeight+20f)+y * cellHeight, canvasWidth, (gridHeight+20f)+y * cellHeight, linePaint)
+            canvas.drawLine(0f, (gridHeight+margin)+y * cellHeight, canvasWidth, (gridHeight+margin)+y * cellHeight, linePaint)
         }
 
         //Draw bottom cell tokens
@@ -238,7 +241,7 @@ class GameViewThree: View {
                 if (game.blueGrid.data[x - 1, y - 1] == GuessCell.MISS) {
                     canvas.drawCircle(
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+20f)+y * cellHeight - cellHeight / 2,
+                        (gridHeight+margin)+y * cellHeight - cellHeight / 2,
                         radius,
                         redCirclePaint
                     )
@@ -255,7 +258,7 @@ class GameViewThree: View {
                     canvas.drawText(
                         "X",
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+20f)+y * cellHeight - cellHeight / 2 + textOffset,
+                        (gridHeight+margin)+y * cellHeight - cellHeight / 2 + textOffset,
                         redXPaint
                     )
                 } else if (game.redPlayer.shipAt(
@@ -270,9 +273,9 @@ class GameViewThree: View {
                 ) {
                     canvas.drawRect(
                         (x - 1) * cellWidth,
-                        gridHeight+20f+(y-1) * cellHeight,
+                        gridHeight+margin+(y-1) * cellHeight,
                         (x) * cellWidth,
-                        gridHeight+20f+(y) * cellHeight,
+                        gridHeight+margin+(y) * cellHeight,
                         redSunkPaint
                     )
                 }
@@ -316,14 +319,17 @@ class GameViewThree: View {
             return true
         }
         override fun onSingleTapUp(e: MotionEvent): Boolean {
+            val canvasHeight = height.toFloat()
+            val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
+            val cellOffset = (canvasHeight+883)/75
             val cellWidth = width.toFloat()/colCount
-            val cellHeight = (height.toFloat()/2)/rowCount
+            val cellHeight = (canvasHeight/2)/rowCount
             val cell = minOf(cellWidth, cellHeight)
             val x = e.x.toInt()
             val y = e.y.toInt()
             val column = x/cell
-            val row =  (y - (height.toFloat()/2)-40f) / cell
-            return if(y < (height.toFloat()/2)+20f){
+            val row =  (y - (canvasHeight/2)-cellOffset) / cell
+            return if(y < (canvasHeight/2)+margin){
                 false
             } else{
                 game.twoPlayerGame(column.toInt(), row.toInt(), game.blueGrid)
@@ -341,14 +347,17 @@ class GameViewThree: View {
             return true
         }
         override fun onSingleTapUp(e: MotionEvent): Boolean {
+            val canvasHeight = height.toFloat()
+            val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
+            val cellOffset = (canvasHeight+883)/75
             val cellWidth = width.toFloat()/colCount
-            val cellHeight = (height.toFloat()/2)/rowCount
+            val cellHeight = (canvasHeight/2)/rowCount
             val cell = minOf(cellWidth, cellHeight)
             val x = e.x.toInt()
             val y = e.y.toInt()
             val column = x/cell
-            val row =  (y-20f)/cell
-            return if(y > (height.toFloat()/2)+20f){
+            val row =  (y-cellOffset)/cell
+            return if(y > (canvasHeight/2)+margin){
                 false
             } else{
                 game.twoPlayerGame(column.toInt(), row.toInt(), game.redGrid)

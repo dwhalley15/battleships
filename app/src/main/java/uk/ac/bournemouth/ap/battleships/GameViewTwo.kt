@@ -8,6 +8,8 @@ import android.view.View
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
 import java.util.concurrent.TimeUnit
+import kotlin.math.sqrt
+
 /**
  *A class that draws he UI for the computer vs computer game mode.
  *
@@ -115,9 +117,11 @@ class GameViewTwo: View {
         val canvasWidth = width.toFloat()
         val canvasHeight = height.toFloat()
 
-        //Measure size for each grid. Maybe do something here with width and height which is greater?
-        val gridWidth = (canvasWidth/2)
+        //Measure height for each grid.
         val gridHeight = (canvasHeight/2)
+
+        //Work out the desired margin between grids.
+        val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
 
 
         //Set the cell size
@@ -199,16 +203,16 @@ class GameViewTwo: View {
         }
 
         //Draw background for bottom grid.
-        canvas.drawRect(0f,gridHeight+20f, canvasWidth, canvasHeight, backPaint)
+        canvas.drawRect(0f,gridHeight+margin, canvasWidth, canvasHeight, backPaint)
 
         //Draw bottom grid column lines
         for(x in 0..colCount){
-            canvas.drawLine(x * cellWidth, gridHeight+20f, x * cellWidth, canvasHeight, linePaint)
+            canvas.drawLine(x * cellWidth, gridHeight+margin, x * cellWidth, canvasHeight, linePaint)
         }
 
         //Draw bottom grid row lines
         for(y in 0..rowCount){
-            canvas.drawLine(0f, (gridHeight+20f)+y * cellHeight, canvasWidth, (gridHeight+20f)+y * cellHeight, linePaint)
+            canvas.drawLine(0f, (gridHeight+margin)+y * cellHeight, canvasWidth, (gridHeight+margin)+y * cellHeight, linePaint)
         }
 
         //Draw bottom cell tokens
@@ -218,15 +222,15 @@ class GameViewTwo: View {
                 if (game.redPlayer.shipAt(x - 1, y - 1) != null) {
                     canvas.drawRect(
                         (x-1) * cellWidth,
-                        gridHeight+20f+(y-1) * cellHeight,
+                        gridHeight+margin+(y-1) * cellHeight,
                         (x) * cellWidth,
-                        gridHeight+20f+(y) * cellHeight,
+                        gridHeight+margin+(y) * cellHeight,
                         shipPaint
                     )
                     canvas.drawText(
                         game.redPlayer.shipAt(x - 1, y - 1)!!.index.toString(),
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+20f)+y * cellHeight - cellHeight / 2 + textOffset,
+                        (gridHeight+margin)+y * cellHeight - cellHeight / 2 + textOffset,
                         wordPaint
                     )
                 }
@@ -234,7 +238,7 @@ class GameViewTwo: View {
                 if (game.blueGrid.data[x - 1, y - 1] == GuessCell.MISS) {
                     canvas.drawCircle(
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+20f)+y * cellHeight - cellHeight / 2,
+                        (gridHeight+margin)+y * cellHeight - cellHeight / 2,
                         radius,
                         redCirclePaint
                     )
@@ -251,7 +255,7 @@ class GameViewTwo: View {
                     canvas.drawText(
                         "X",
                         x * cellWidth - cellWidth / 2,
-                        (gridHeight+20f)+y * cellHeight - cellHeight / 2 + textOffset,
+                        (gridHeight+margin)+y * cellHeight - cellHeight / 2 + textOffset,
                         redXPaint
                     )
                 } else if (game.redPlayer.shipAt(
@@ -266,9 +270,9 @@ class GameViewTwo: View {
                 ) {
                     canvas.drawRect(
                         (x - 1) * cellWidth,
-                        gridHeight+20f+(y-1) * cellHeight,
+                        gridHeight+margin+(y-1) * cellHeight,
                         (x) * cellWidth,
-                        gridHeight+20f+(y) * cellHeight,
+                        gridHeight+margin+(y) * cellHeight,
                         redSunkPaint
                     )
                 }
