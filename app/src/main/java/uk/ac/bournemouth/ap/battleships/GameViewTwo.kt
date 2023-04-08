@@ -121,7 +121,7 @@ class GameViewTwo: View {
         val gridHeight = (canvasHeight/2)
 
         //Work out the desired margin between grids.
-        val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
+        val margin = ((canvasHeight*0.94)/100).toFloat()
 
 
         //Set the cell size

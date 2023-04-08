@@ -123,7 +123,7 @@ class GameView: View {
         val gridHeight = (canvasHeight/2)
 
         //Work out the desired margin between grids.
-        val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
+        val margin = ((canvasHeight*0.94)/100).toFloat()
 
         //Set the cell size
         val cellWidth = minOf(canvasWidth / colCount)
@@ -319,8 +319,8 @@ class GameView: View {
         }
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             val canvasHeight = height.toFloat()
-            val margin = (sqrt(canvasHeight * 0.01) + 15).toFloat()
-            val cellOffset = (canvasHeight+883)/75
+            val margin = ((canvasHeight*0.94)/100).toFloat()
+            val cellOffset = ((canvasHeight*1.89)/100).toFloat()
             val cellWidth = width.toFloat()/colCount
             val cellHeight = (canvasHeight/2)/rowCount
             val cell = minOf(cellWidth, cellHeight)
