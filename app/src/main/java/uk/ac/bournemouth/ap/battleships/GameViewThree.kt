@@ -119,11 +119,11 @@ class GameViewThree: View {
         val canvasWidth = width.toFloat()
         val canvasHeight = height.toFloat()
 
-        //Measure height for each grid.
-        val gridHeight = (canvasHeight/2)
-
         //Work out the desired margin between grids.
         val margin = ((canvasHeight*0.94)/100).toFloat()
+
+        //Measure height for each grid.
+        val gridHeight = (canvasHeight/2)-margin
 
         //Set the cell size
         val cellWidth = minOf(canvasWidth / colCount)
@@ -205,11 +205,11 @@ class GameViewThree: View {
         }
 
         //Draw background for bottom grid.
-        canvas.drawRect(0f,gridHeight+margin, canvasWidth, canvasHeight, backPaint)
+        canvas.drawRect(0f,gridHeight+margin, canvasWidth, canvasHeight-margin, backPaint)
 
         //Draw bottom grid column lines
         for(x in 0..colCount){
-            canvas.drawLine(x * cellWidth, gridHeight+margin, x * cellWidth, canvasHeight, linePaint)
+            canvas.drawLine(x * cellWidth, gridHeight+margin, x * cellWidth, canvasHeight-margin, linePaint)
         }
 
         //Draw bottom grid row lines
@@ -321,14 +321,13 @@ class GameViewThree: View {
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             val canvasHeight = height.toFloat()
             val margin = ((canvasHeight*0.94)/100).toFloat()
-            val cellOffset = ((canvasHeight*1.89)/100).toFloat()
             val cellWidth = width.toFloat()/colCount
             val cellHeight = (canvasHeight/2)/rowCount
             val cell = minOf(cellWidth, cellHeight)
             val x = e.x.toInt()
             val y = e.y.toInt()
             val column = x/cell
-            val row =  (y - (canvasHeight/2)-cellOffset) / cell
+            val row =  (y - (canvasHeight/2)-margin) / cell
             return if(y < (canvasHeight/2)+margin){
                 false
             } else{
@@ -349,14 +348,13 @@ class GameViewThree: View {
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             val canvasHeight = height.toFloat()
             val margin = ((canvasHeight*0.94)/100).toFloat()
-            val cellOffset = ((canvasHeight*1.89)/100).toFloat()
             val cellWidth = width.toFloat()/colCount
             val cellHeight = (canvasHeight/2)/rowCount
             val cell = minOf(cellWidth, cellHeight)
             val x = e.x.toInt()
             val y = e.y.toInt()
             val column = x/cell
-            val row =  (y-cellOffset)/cell
+            val row =  (y-margin)/cell
             return if(y > (canvasHeight/2)+margin){
                 false
             } else{

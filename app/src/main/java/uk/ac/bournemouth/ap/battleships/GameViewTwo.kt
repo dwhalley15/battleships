@@ -117,11 +117,11 @@ class GameViewTwo: View {
         val canvasWidth = width.toFloat()
         val canvasHeight = height.toFloat()
 
-        //Measure height for each grid.
-        val gridHeight = (canvasHeight/2)
-
         //Work out the desired margin between grids.
         val margin = ((canvasHeight*0.94)/100).toFloat()
+
+        //Measure height for each grid.
+        val gridHeight = (canvasHeight/2)-margin
 
 
         //Set the cell size
@@ -203,11 +203,11 @@ class GameViewTwo: View {
         }
 
         //Draw background for bottom grid.
-        canvas.drawRect(0f,gridHeight+margin, canvasWidth, canvasHeight, backPaint)
+        canvas.drawRect(0f,gridHeight+margin, canvasWidth, canvasHeight-margin, backPaint)
 
         //Draw bottom grid column lines
         for(x in 0..colCount){
-            canvas.drawLine(x * cellWidth, gridHeight+margin, x * cellWidth, canvasHeight, linePaint)
+            canvas.drawLine(x * cellWidth, gridHeight+margin, x * cellWidth, canvasHeight-margin, linePaint)
         }
 
         //Draw bottom grid row lines
