@@ -38,7 +38,7 @@ class StudentBattleshipTest : BattleshipTest<MyShip>() {
             opponent as? MySecondOpponent
                 ?: createOpponent(opponent.columns, opponent.rows, opponent.ships.map { it as? MyShip ?: transformShip(it) })
 
-        return MySecondGrid(columns = 10, rows = 10, studentOpponent)
+        return MySecondGrid(opponent.columns, opponent.rows, studentOpponent)
     }
 }
 

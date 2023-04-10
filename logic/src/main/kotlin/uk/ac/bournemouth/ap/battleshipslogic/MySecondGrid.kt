@@ -16,11 +16,16 @@ class MySecondGrid(
 
     override val shipsSunk = BooleanArray(opponent.ships.size)
 
+    override val isFinished: Boolean
+        get() = super.isFinished
+
     override fun get(column: Int, row: Int): GuessCell {
         return data[column, row]
     }
 
     override fun shootAt(column: Int, row: Int): GuessResult {
+        require(isOnGrid(Coordinate(column, row)))
+        require(data[column, row] == GuessCell.UNSET)
         if (opponent.shipAt(column, row) != null) {
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index
@@ -68,4 +73,6 @@ class MySecondGrid(
     private fun isOnGrid(guessCell:Coordinate): Boolean{
         return (guessCell.x < columns && guessCell.y < rows) && (guessCell.x >= 0 && guessCell.y >= 0)
     }
+
+
 }
