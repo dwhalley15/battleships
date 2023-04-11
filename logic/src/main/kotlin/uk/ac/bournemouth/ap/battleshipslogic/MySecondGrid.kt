@@ -10,14 +10,11 @@ class MySecondGrid(
     override val opponent: MySecondOpponent
 ) : BattleshipGrid {
 
-    private val data = MutableMatrix<GuessCell>(columns, rows) { col, row -> GuessCell.UNSET }
+    private val data = MutableMatrix<GuessCell>(columns, rows) { _, _ -> GuessCell.UNSET }
 
     private val gridChangeListeners = mutableListOf<BattleshipGrid.BattleshipGridListener>()
 
     override val shipsSunk = BooleanArray(opponent.ships.size)
-
-    override val isFinished: Boolean
-        get() = super.isFinished
 
     override fun get(column: Int, row: Int): GuessCell {
         return data[column, row]
@@ -30,12 +27,13 @@ class MySecondGrid(
             val ship = opponent.shipAt(column, row)!!.ship
             val index = opponent.shipAt(column, row)!!.index
             data[column, row] = GuessCell.HIT(index)
-            if (checkIfSunk(ship)) {
+            if (checkIfSunk(ship, index)) {
                 for (col in ship.left..ship.right) {
                     for (r in ship.top..ship.bottom) {
                         data[col, r] = GuessCell.SUNK(index)
                     }
                 }
+                shipsSunk[index] = true
                 onGridChanged(column, row)
                 return GuessResult.SUNK(index)
             }
@@ -49,9 +47,19 @@ class MySecondGrid(
         }
     }
 
-    private fun checkIfSunk(ship: MyShip): Boolean{
-        ship.hits++
-        return ship.isSunk
+    private fun checkIfSunk(ship: MyShip, index: Int): Boolean{
+        var hits = 0
+        for(col in 0 until columns){
+            for(row in 0 until rows){
+                if(data[col, row] == GuessCell.HIT(index)){
+                    hits++
+                }
+            }
+        }
+        if(hits == ship.size){
+            return true
+        }
+        return false
     }
 
     override fun addOnGridChangeListener(listener: BattleshipGrid.BattleshipGridListener) {
@@ -73,6 +81,7 @@ class MySecondGrid(
     private fun isOnGrid(guessCell:Coordinate): Boolean{
         return (guessCell.x < columns && guessCell.y < rows) && (guessCell.x >= 0 && guessCell.y >= 0)
     }
+
 
 
 }

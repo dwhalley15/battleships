@@ -22,24 +22,25 @@ class MySecondOpponent(
     //A function that checks the passed in list of ships do not overlap and do not go off the grid.
     //When implemented this works and testInvalidShips test passes, but it breaks 4 other tests that work without this.
     private fun validShipPlacement(ships: List<MyShip>){
-        for(i in 0..ships.size){
-            if(!isOnGrid(ships[i].topLeft) || !isOnGrid(ships[i].bottomRight)){
-                throw java.lang.IllegalArgumentException("Ship is not on the grid.")
+        for(i in ships.indices){
+                if (!(isOnGrid(ships[i].left, ships[i].top) && isOnGrid(ships[i].right, ships[i].bottom))) {
+                    throw java.lang.IllegalArgumentException("Ship is not on the grid.")
                 }
-            if(ships[i].rowIndices.intersect(ships[i+1].rowIndices).isNotEmpty()){
+            //This needs work..
+            /*if(ships[i].rowIndices.intersect(ships[i+1].rowIndices).isNotEmpty()){
                 if(ships[i].columnIndices.intersect(ships[i+1].columnIndices).isNotEmpty()){
                     throw java.lang.IllegalArgumentException("Ships overlap.")
                 }
-            }
+            }*/
         }
     }
 
-    private fun isOnGrid(guessCell: Coordinate): Boolean{
-        return (guessCell.x < columns && guessCell.y < rows) && (guessCell.x >= 0 && guessCell.y >= 0)
+    private fun isOnGrid(column: Int, row: Int): Boolean{
+        return (column < columns && row < rows) && (column >= 0 && row >= 0)
     }
 
     init {
-        //validShipPlacement(ships)
+        validShipPlacement(ships)
     }
 
 }
