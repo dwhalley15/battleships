@@ -53,7 +53,8 @@ class MyOpponent(
         val ships = (mutableListOf<MyShip>())
         for(ship in shipTypes){
             do{
-                val direction = random.nextInt(0, 2)
+                var direction = random.nextInt(0, 2)
+                direction = shipAndGridSize(direction, ship, columns, rows)
                 val top: Int =
                     if (direction == 0) {
                         random.nextInt(0, rows)
@@ -87,6 +88,21 @@ class MyOpponent(
             while(!overlapping(candidate, ships))
         }
         return ships
+    }
+
+    fun shipAndGridSize(direction: Int, shipSize: Int, columns: Int, rows: Int): Int{
+        var newDirection = direction
+        if(direction == 0){
+            if(shipSize > columns){
+                newDirection = 1
+            }
+        }
+        else{
+            if(shipSize > rows){
+                newDirection = 0
+            }
+        }
+        return newDirection
     }
 
     /**
