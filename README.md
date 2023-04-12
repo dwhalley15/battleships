@@ -1,6 +1,3 @@
-# sit-dwhalley15
-sit-dwhalley15 created by GitHub Classroom
-
 Battleships version 1.0 12/04/2023
 ==================================
 
