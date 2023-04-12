@@ -1,7 +1,7 @@
 package uk.ac.bournemouth.ap.battleshipslogic
 
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
-import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
+
 
 class MySecondOpponent(
     override val columns: Int,
@@ -26,13 +26,22 @@ class MySecondOpponent(
                 if (!(isOnGrid(ships[i].left, ships[i].top) && isOnGrid(ships[i].right, ships[i].bottom))) {
                     throw java.lang.IllegalArgumentException("Ship is not on the grid.")
                 }
-            //This needs work..
-            /*if(ships[i].rowIndices.intersect(ships[i+1].rowIndices).isNotEmpty()){
-                if(ships[i].columnIndices.intersect(ships[i+1].columnIndices).isNotEmpty()){
+                if(isOverlapping(ships[i], ships)){
                     throw java.lang.IllegalArgumentException("Ships overlap.")
                 }
-            }*/
         }
+    }
+
+    private fun isOverlapping(candidate: MyShip, ships: List<MyShip>): Boolean{
+        for(ship in ships) {
+            if(ship == candidate) continue
+            if (candidate.rowIndices.intersect(ship.rowIndices).isNotEmpty()){
+                if(candidate.columnIndices.intersect(ship.columnIndices).isNotEmpty()){
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     private fun isOnGrid(column: Int, row: Int): Boolean{
