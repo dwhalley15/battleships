@@ -1,6 +1,5 @@
 package uk.ac.bournemouth.ap.battleships
 
-
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -8,7 +7,6 @@ import android.view.View
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
 import java.util.concurrent.TimeUnit
-import kotlin.math.sqrt
 
 /**
  *A class that draws he UI for the computer vs computer game mode.

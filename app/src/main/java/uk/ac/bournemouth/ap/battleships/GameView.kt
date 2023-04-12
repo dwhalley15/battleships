@@ -10,7 +10,6 @@ import androidx.core.view.GestureDetectorCompat
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
-import kotlin.math.sqrt
 
 /**
  *A class that draws he UI for the single player game mode.

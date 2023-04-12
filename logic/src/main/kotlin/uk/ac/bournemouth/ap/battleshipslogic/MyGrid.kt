@@ -8,6 +8,8 @@ import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
 /**
  *A class that represents a players grid.
+ * This version takes in an opponent of type MyOpponent.
+ * This version has implementation for AI shots, these shots are validated before shootAt is called.
  *
  * @author David Whalley
  *
@@ -139,7 +141,7 @@ class MyGrid(
     /**
      * A function to check if a given ship has been sunk.
      *
-     * @param ship A give ship of type MyShip.
+     * @param ship A given ship of type MyShip.
      *
      * @return True or false depending on if the given ship has been sunk.
      */

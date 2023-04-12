@@ -101,7 +101,7 @@ class MyBattleShipGame(val columns: Int, val rows: Int){
 
     /**
      * Main function for a two player game.
-     * Represents a human player taking a turn then passing to the next player.
+     * Represents a human player taking a turn then passing to the next human player.
      *
      * @param column of a human guessed cell.
      * @param row of a human guessed cell.

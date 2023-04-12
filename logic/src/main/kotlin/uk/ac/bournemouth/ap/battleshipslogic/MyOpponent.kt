@@ -5,6 +5,7 @@ import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 import kotlin.random.Random
 /**
  *A class that represents an opponent player of the grid it is passed into.
+ * This version randomly places ships in a List and validates their position on initialisation.
  *
  * @author David Whalley
  *
@@ -90,7 +91,18 @@ class MyOpponent(
         return ships
     }
 
-    fun shipAndGridSize(direction: Int, shipSize: Int, columns: Int, rows: Int): Int{
+    /**
+     * A function that checks if a given ship and ship placement direction will fit on the grid.
+     * If not changes the direction to one that will fit.
+     *
+     * @param direction The direction the shpi is currently facing..
+     * @param shipSize The size of the given ship.
+     * @param columns Maximum columns in the grid.
+     * @param rows Maximum rows in the grid.
+     *
+     * @return The direction based on the check.
+     */
+    private fun shipAndGridSize(direction: Int, shipSize: Int, columns: Int, rows: Int): Int{
         var newDirection = direction
         if(direction == 0){
             if(shipSize > columns){

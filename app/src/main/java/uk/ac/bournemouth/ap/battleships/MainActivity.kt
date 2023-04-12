@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import uk.ac.bournemouth.ap.battleshipslogic.MyBattleShipGame
+
 /**
  *A class that creates the UI for the game menu.
  *
