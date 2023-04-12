@@ -20,7 +20,6 @@ class MySecondOpponent(
     }
 
     //A function that checks the passed in list of ships do not overlap and do not go off the grid.
-    //When implemented this works and testInvalidShips test passes, but it breaks 4 other tests that work without this.
     private fun validShipPlacement(ships: List<MyShip>){
         for(i in ships.indices){
                 if (!(isOnGrid(ships[i].left, ships[i].top) && isOnGrid(ships[i].right, ships[i].bottom))) {

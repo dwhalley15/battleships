@@ -157,9 +157,11 @@ class MyGrid(
         opponent.tactics.clear()
         for(col in 0 until columns){
             for(row in 0 until rows) {
-                if (data[col, row] == GuessCell.HIT(0) || data[col, row] == GuessCell.HIT(1) || data[col, row] == GuessCell.HIT(2) || data[col, row] == GuessCell.HIT(3) || data[col, row] == GuessCell.HIT(4)) {
-                    val hit = Coordinate(col, row)
-                    opponent.hits.add(hit)
+                for(index in 0 until opponent.ships.size) {
+                    if(data[col, row] == GuessCell.HIT(index)){
+                        val hit = Coordinate(col, row)
+                        opponent.hits.add(hit)
+                    }
                 }
             }
         }
