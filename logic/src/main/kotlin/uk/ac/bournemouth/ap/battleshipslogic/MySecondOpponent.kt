@@ -26,9 +26,30 @@ class MySecondOpponent(
                     throw java.lang.IllegalArgumentException("Ship is not on the grid.")
                 }
                 if(isOverlapping(ships[i], ships)){
-                    throw java.lang.IllegalArgumentException("Ships overlap.")
+                    throw java.lang.IllegalArgumentException("Ship overlaps another.")
+                }
+                if(!isShipDirValid(ships[i])){
+                    throw java.lang.IllegalArgumentException("Ship has an inverted direction.")
+                }
+                if(!isShipValid(ships[i])){
+                    throw java.lang.IllegalArgumentException("Ship has an invalid shape.")
                 }
         }
+    }
+
+    private fun isShipDirValid(candidate: MyShip): Boolean{
+        return if(candidate.top > candidate.bottom){
+            false
+        } else candidate.left <= candidate.right
+    }
+
+    private fun isShipValid(candidate: MyShip): Boolean{
+        if(candidate.top != candidate.bottom){
+            if(candidate.left != candidate.right){
+                return false
+            }
+        }
+        return true
     }
 
     private fun isOverlapping(candidate: MyShip, ships: List<MyShip>): Boolean{
