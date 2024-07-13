@@ -6,7 +6,7 @@ A simple battleships game. Written in Kotlin for Andriod. The logic and UI are s
 Location
 ========
 
-https://github.com/BUAprog2023/sit-dwhalley15.git
+https://github.com/dwhalley15/battleships
 
 Requirements
 ============
